@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/jquery-2.2.3.min.js"></script>
+		<style>
+		</style>
+		<script>
+			$(function(){
+				window.log=console.log;
+			//将一个字符串重复自身N此,如repeat("java",2),得到javajava
+				function repeatV1(target, n){
+					return (new Array(n+1)).join(target);
+				}
+				log(repeatV1("ab",5));
+				
+				//版本2:用call方法调用数组原型的join方法,省去创建数组这一步,性能提高.重复越多,对比越明显
+				function repeatV2(target, n){
+					//之所以call传入第一个参数为{length:n+1}这个对象,因为 要调用数组的原型方法,
+					//需要制定call的第一个参数为 类数组对象.而类数组对象的必要条件是其length属性值为非负整数
+					return Array.prototype.join.call({
+						length:n+1
+					},target);
+				}
+				
+				//版本3:利用闭包 将 类数组对象 与 数组原型的join方法 缓存起来,省的每次都重复创建和寻找方法
+				var repeatV3 = (function(){
+					var join = Array.prototype.join,obj={};
+					return function(target,n){
+						obj.length = n+1;
+						return join.call(obj,target);
+					}
+				})();
+				
+				//版本4:从算法入手,使用二分法.比如若将java重复5次,其实第二次已经有javajava了.那么第三次直接用javajava操作
+				function repeatV4(target,n){
+					var s = target, total=[];
+					while(n>0){
+						if(n%2==1){
+							total[total.length]=s;//若为奇数
+						}
+						if(n==1){
+							break;
+						}
+						s+=s;
+						n=n>>1;//右移一位,相当于将n处以2取其 商
+					}
+					return total.join('');
+				}
+				
+			});
+		</script>
+	</head>
+
+	<body>
+		
+	</body>
+
+</html>

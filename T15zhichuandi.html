@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/jquery-2.2.3.min.js"></script>
+		<script>
+			//一.引用类型,即使重新new也会对传进去的参数产生影响
+			var obj1={};
+			var arr1=[];
+			
+			var date=new Date();
+			
+			var arr2=[];
+			var date2=new Date();
+			
+			var arr3;
+			//基本数据类型:Undefined,Null,Boolean,Number,String按值访问
+			var un=undefined;
+			var nu=null;
+			var bo=true;
+			var num=1;
+			var str1="";
+			
+			var fun1=function(obj1,arr1,str1,un,nu,bo,num){
+				obj1["id"]="zc";
+				arr1.push("1");
+				//由于date重新new了,引用改变
+				date.setFullYear("1111");
+				
+				arr2=new Array();
+				arr2.push(1,2);
+				
+				date2=new Date();
+				date2.setFullYear("1222");
+				
+				arr3=[3,3,3];
+				str1="haha";
+				un="hehe";
+				nu="hehe";
+				bo="heh";
+				num="heh";
+			}
+			$(function(){
+				fun1(obj1,arr1,str1);
+				//实验证明,Object,Array是引用类型,而String是基本数据类型
+				console.log(obj1);//改变了
+				console.log(arr1);//改变了
+				
+				console.log(date);//改变了
+				
+				console.log(arr2);//改变了
+				console.log(date2);//改变了
+				
+				console.log(arr3);//改变了
+				
+				console.log(str1);//没变
+				console.log(un);//没变
+				console.log(nu);//没变
+				console.log(bo);//没变
+				console.log(num);//没变
+				
+			});
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

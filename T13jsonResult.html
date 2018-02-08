@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/jquery-2.2.3.min.js"></script>
+		<script>
+		$(function(){
+			var jsonResult1={"result":{"data":[{"PRODUCTNAME":"hhh","PROSPECTIVEEARNINGS":"","DEADLINE":"","SERIES":"","LABEL":"","ID":3,"PRODUCTNO":"YYHJ23232","TAG":"热门产品"}],"totalRecord":1},"returnCode":"000000","returnMessage":"Success"};
+			console.log(jsonResult1.result.data[0].PRODUCTNAME);
+			var jsonResult2={"result":{"data":[],"totalRecord":1},"returnCode":"000000","returnMessage":"Success"};
+			console.log(jsonResult2.result.data[0]);
+		});
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

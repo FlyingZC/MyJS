@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>面向对象-继承</title>
+		<script>
+			window.log = console.log;
+//=======================二.继承====================== 
+		//ECMAScript依赖 原型链 实现继承
+		//基本思想:利用原型 让 一个引用类型  继承 另一个引用类型 的属性和 方法
+		//每个[构造函数] 都有一个 [原型对象] Student.prototype
+		//[原型对象] 都包含一个指向 [构造函数]的指针  Student.prototype.constructor == Student
+		//每个[实例] 都包含一个指向[原型对象]的内部指针 stu1._proto_ == Student.prototype
+		
+		//若 让原型对象  等于  另一个类型的 实例.  显然,此时 原型对象 将包含一个指向另一个原型的指针
+		
+		//(1)原型链147 p166
+			//原型：原型中的所有属性和方法是该对象所有实例共享的(一份).
+			//而调用构造器,每个实例的属性和方法都是重新创建一份的
+			//原型相当于一个指针,指向一个对象,该对象包含特定类型的可供所有实例共享的属性和方法
+			//缺点:仅仅使用原型继承,依然是会导致引用类型属性 共享 的 问题
+			console.log("---继承---");
+			//定义父类型的构造函数
+			function SuperType(){
+				//必须加this
+				this.name="super类型";
+				//若不加this,age此时相当于函数内部的局部变量,在外部无法访问??不是全局变量?
+				age=111;
+			}
+			//定义父类型中prototype中的getSuperValue()方法,
+			//该方法为 SuperType的所有实例共享
+			SuperType.prototype.getSuperValue=function(){
+				return this.name;
+			}
+			
+			//定义子类型构造函数
+			function SubType(){
+				this.subName="sub类型";
+			}
+			
+			//继承SuperType.!!!!继承实现的本质是 重写原型对象 为 SuperType的实例对象
+			//即 原来存在于SuperType的实例中的所有属性和方法，现在也存在于SubType.prototype中了
+			//此时若调用子类型中的某个方法，会按照subType->superType实例对象(此时即为subType的原型)->superType.prototype->Object对象->Object.prototype寻找
+			//不能使用字面量方式实现继承,因为这样相当于重写了prototype函数
+			SubType.prototype=new SuperType();
+			//在确立了继承关系后，定义子类型自己的getSubValue方法。这样就在继承了SuperType的属性和方法的基础上又添加了一个新方法
+			SubType.prototype.getSubValue=function(){
+				return this.subName;
+			}
+			//重写父类中的getSuperValue方法.子类的prototype指向的是父类的实例
+			SubType.prototype.getSuperValue=function(){
+				return "zx子类重写后的方法";
+			}
+			
+			//子类型调用重写后的方法
+			console.log("子类型调用重写后的方法--");
+			var sub=new SubType();
+			console.log(sub.getSuperValue());//zx子类重写后的方法
+			
+			//父类型调用重写后的方法,super是保留关键字
+			var super2=new SuperType();
+			console.log(super2.getSuperValue());//输出仍然 是 super中的方法
+			//创建子类型
+			var instance=new SubType();
+			console.log(instance.getSuperValue());
+			console.log(instance.getSubValue());
+			console.log(instance instanceof SubType);//true
+			console.log(instance instanceof SuperType);//true
+			console.log(instance instanceof Object);//true
+			console.log(instance.name);
+		
+		
+			//原型链的 问题,来自于   包含引用类型值   的   原型
+			//包含 引用类型值的 原型属性 会被 所有实例共享
+			//通过 原型来实现继承时,原型 实际上会变成 另一个类型的实例
+			//于是 ,原先的实例属性 也 顺理成章 成为了 现在的原型属性了
+			function SuperTypeQ(){
+				this.colors = ["r","g","b"];
+			}
+			
+			function SubTypeQ(){
+				
+			}
+			
+			//!!!继承 SuperType.这句话会导致,new SuperType()对象中包含colors属性
+			//赋值给SubType.prototype,则相当于SubType.prototype中拥有colors属性
+			//即子类原型对象中拥有colors属性,而原型中的属性是所有实例对象共享的
+			SubTypeQ.prototype=new SuperTypeQ();
+			
+			var instance1 = new SubTypeQ();
+			//所以相当于修改了  [子类原型对象] 中的 属性
+			instance1.colors.push("yellow");
+			
+			var instance2 = new SubTypeQ();
+			console.log(instance1.colors);
+			//也会对其他的 [子类实例属性] 产生影响
+			console.log(instance2.colors);
+			
+			
+		//继承(2)借用构造器 call	(),优点是可以向父类构造方法传参
+		//继承方式2:借用构造函数
+			//优点:可以解决原型 中 包含 引用类型值 所 带来的问题
+			//基本思想:在调用子类构造函数 时 调用父类构造函数(使用call仅仅把父类当做普通函数调用)
+			//!!!函数 只不过是 在特定环境中执行代码的对象
+			//问题:单纯使用借用构造函数的话,方法无法复用(相当于方法都定义在构造函数里了)
+			function SuperTypeJ(){
+				this.colors=["r","g","b"];//3.此时this指代子类对象,当然子类对象会拥有colors属性.这确保每个子类的colors属性都是自己的一份
+			}
+			function SubTypeJ(){
+				SuperTypeJ.call(this);//2.调用父函数,传入this
+			}
+			var j1 = new SubTypeJ();//1.创建子类对象
+			var j2 = new SubTypeJ();
+			
+			j1.colors.push("yellow");
+			log(j1.colors);
+			log(j2.colors);
+			
+			//!!借用构造函数 实现继承的应用1.可向父类构造函数 传递参数
+			function SuperTypeJ2(name){
+				this.name = name;	
+			}
+			
+			function SubTypeJ2(){
+				//继承了 SuperType,同时还传递了参数
+				SuperTypeJ2.call(this,"zcc");
+				//为了确保 父类 不会重写掉子类的属性,在调用父类构造函数之后再添加子类的属性
+				this.age = 29;
+			}
+			
+			var j21 = new SubTypeJ2();
+			log(j21.name);
+			log(j21.age);
+	
+		
+	//!!!继承(3)组合继承  即 原型链+借用构造函数
+			console.log("--组合继承--");
+			//!!!使用原型链实现对原型 属性 和 方法 的 继承.借用构造函数 实现 对 实例属性的继承
+			function SuperClass(name){
+				this.name=name;
+				this.colors=["red","blue","green"];
+			}
+			SuperClass.prototype.sayName=function(){
+				console.log(this.name);
+			}
+			//子类
+			function SubClass(name,age){
+				SuperClass.call(this,name);//继承父类中的属性
+				this.age=age;
+			}
+			//继承方法
+			SubClass.prototype=new SuperClass();
+			//定义子类方法
+			SubClass.prototype.sayAge=function(){
+				console.log(this.age);
+			}
+			//子类对象1
+			var s1=new SubClass("nick",22);
+			s1.colors.push("black");
+			//[red","blue","green","black"]
+			console.log(s1.colors);//由于使用call调用构造器,属性均为每个实例私有的.互不影响
+			//方法定义在了原型链中,为所有实例共享,相当于java中的只有一份方法
+			s1.sayName();
+			s1.sayAge();
+			//子类对象2
+			var s2=new SubClass("nzdd",44);
+			//[red","blue","green"]
+			console.log(s2.colors);
+			s2.sayName();
+			s2.sayAge();
+			
+			console.log(s1 instanceof SubClass);
+			console.log(s1 instanceof SuperClass);
+			console.log(s1 instanceof Object);
+			console.log(s2 instanceof SubClass);
+			console.log(s2 instanceof SuperClass);
+			console.log(s2 instanceof Object);
+			
+		//继承(4) 原型式继承
+			function createObject(o){
+				//创建临时性的构造函数F
+				function F(){}
+				//将传入的 参数对象o  作为 该构造函数的 原型对象
+				F.prototype=o;
+				//返回这个临时类型 作为一个 新的实例
+				return new F();
+			}
+			
+			var person4={
+				name:"zxxx",
+				friends:["selly","tom","kitty"]
+			};
+			//返回的anotherPerson对象以person4对象为原型.
+			//所以anotherPerson的prototype中包含  person4中的属性
+			var anotherPerson=createObject(person4);
+			anotherPerson.name="Greg";
+			anotherPerson.friends.push("Rob");
+			
+			var yetPerson=createObject(person4);
+			yetPerson.name="Linda";
+			yetPerson.friends.push("Brr");
+			
+			//!!!!原型中所有引用类型的变量为所有实例共享,基本类型则为私有
+			//注意person4是原型对象
+			console.log(person4.name);//"zxxx"
+			console.log(person4.friends);//["selly", "tom", "kitty", "Rob", "Brr"]
+			
+			//由于friends对象 在创建的anotherPerson和yetPerson对象  的 原型对象中,且是引用类型.修改会被共享
+			log(anotherPerson.friends);
+			log(yetPerson.friends);
+			
+			//ECMAScript5通过新增Object.create(作为新对象原型的对象,作为新对象额外属性的对象-可选)   规范化了原型式继承
+			var person41={
+				name:"zxxx",
+				friends:["selly","tom","kitty"]
+			};
+			//[1]传入一个参数
+			var anotherPerson1=Object.create(person41);
+			anotherPerson1.name="Greg";
+			anotherPerson1.friends.push("Rob");
+			
+			var yetPerson1=Object.create(person41);
+			yetPerson1.name="Linda";
+			yetPerson1.friends.push("Brr");
+			console.log(person41.name);//"zxxx"
+			console.log(person41.friends);//["selly", "tom", "kitty", "Rob", "Brr"]
+		
+			//[2]传入两个参数
+			var anotherPerson2=Object.create(person41,{
+				name:{
+					value:"Grrrrr"
+				}
+			});
+			
+		
+		//继承(5) 寄生式继承
+			
+		
+		
+		//未
+			//6.3.4-5-6未
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+

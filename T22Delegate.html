@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>事件委托,事件代理</title>
+		<script src="js/jquery-2.2.3.min.js"></script>
+		<style>
+			li {
+				background: red;
+			}
+			
+			ul {
+				border: 1px solid black;
+			}
+		</style>
+		<script>
+			$(function() {
+				//分别注释比较f1,v1,v2区别
+				//f1();
+				//v1();
+				v2();
+
+				vbox();
+
+				//如果新添加元素,事件委托也能正确的自动绑定事件.若采用传统方式,只能自己一个个绑定事件了
+				delegateAddElem();
+			});
+
+			var f1 = function() {
+				//传统方式,一个个元素绑定click事件.这样会频繁绑定事件,造成大量dom操作
+				var oUl = document.getElementById("ul1");
+				var aLi = oUl.getElementsByTagName('li');
+				for(var i = 0; i < aLi.length; i++) {
+					aLi[i].onclick = function() {
+						alert(123);
+					}
+				}
+			}
+
+			//事件委托,只绑定一次事件,交由不同的js函数处理不同事件,不会频繁绑定事件
+			//事件委托 方式1 绑定事件,但此时有个问题,当点击ul元素时也会alert.
+			var v1 = function() {
+				var oUl = document.getElementById("ul1");
+				oUl.onclick = function() {
+					alert(123);
+				}
+			}
+
+			//可以根据元素target判断,只有li元素才alert
+			var v2 = function() {
+				var oUl = document.getElementById("ul1");
+				oUl.onclick = function() {
+					var ev = ev || window.event;　　　　
+					var target = ev.target || ev.srcElement;　　　　
+					if(target.nodeName.toLowerCase() == 'li') {　　　　　　　
+						alert(123);　　　　　　　
+						alert(target.innerHTML);　　　　
+					}
+				}
+			}
+
+			//事件委托通过不同函数处理不同事件
+			var vbox = function() {
+				var oBox = document.getElementById("box");
+				oBox.onclick = function(ev) {
+					var ev = ev || window.event;
+					var target = ev.target || ev.srcElement;
+					if(target.nodeName.toLocaleLowerCase() == 'input') {
+						switch(target.id) {
+							case 'add':
+								alert('添加');
+								break;
+							case 'remove':
+								alert('删除');
+								break;
+							case 'move':
+								alert('移动');
+								break;
+							case 'select':
+								alert('选择');
+								break;
+						}
+					}
+				}
+			}
+
+			var delegateAddElem = function() {
+				var oBtn = document.getElementById("btn2");
+				var oUl = document.getElementById("u2");
+				var aLi = oUl.getElementsByTagName('li');
+				var num = 4;
+
+				//事件委托，添加的子元素也有事件
+				oUl.onmouseover = function(ev) {
+					var ev = ev || window.event;
+					var target = ev.target || ev.srcElement;
+					if(target.nodeName.toLowerCase() == 'li') {
+						target.style.background = "red";
+					}
+
+				};
+				oUl.onmouseout = function(ev) {
+					var ev = ev || window.event;
+					var target = ev.target || ev.srcElement;
+					if(target.nodeName.toLowerCase() == 'li') {
+						target.style.background = "#fff";
+					}
+
+				};
+
+				//添加新节点
+				oBtn.onclick = function() {
+					num++;
+					var oLi = document.createElement('li');
+					oLi.innerHTML = 111 * num;
+					oUl.appendChild(oLi);
+				};
+			}
+		</script>
+	</head>
+
+	<body>
+		<ul id="ul1">
+			<li>111</li>
+			<li>222</li>
+			<li>333</li>
+			<li>444</li>
+		</ul>
+		
+		<br>
+		<br>
+		<br>
+		<hr />
+		<div id="box">
+			<input type="button" id="add" value="添加" />
+			<input type="button" id="remove" value="删除" />
+			<input type="button" id="move" value="移动" />
+			<input type="button" id="select" value="选择" />
+		</div>
+		
+		<br>
+		<br>
+		<br>
+		<hr />
+		<div>事件委托添加新元素也能绑定事件</div>
+		<div><button id="btn2">addLi</button></div>
+		<ul id="u2">
+			
+		</ul>
+	</body>
+
+</html>

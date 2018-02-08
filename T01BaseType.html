@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title> 
+				五种基本数据类型,
+				4.typeof,
+				5.Boolean(),Boolean()判断依据,
+				一.Number类型,
+				二.string类型,
+				三.Object类型,
+				四.Function类型
+		</title>
+		<script>
+			//五种基本数据类型:Undefined,Null,Boolean,String,Number按值访问
+			var message;
+			console.log(message);//undefined
+			var msg2="hi";
+			msg2=10;
+			//(1)当省略var关键字时,声明的变量将可能会成为全局变量
+			function test(){
+				stu="hi";//此时stu为全局变量
+			}
+			//(2)调用一次
+			test();
+			//则该变量有了定义,就可以在函数外部的任何地方被访问到
+			console.log(stu);
+			//3.定义多个变量
+			var a="hi",b=2,c=false;
+			
+		//4.typeof操作符 检测给定变量的数据类型,返回字符串
+			console.log("--04.typeof--");
+			//可能会返回"undefined" "boolean" "string" "number" "object" "function"这6个字符串
+			//typeof null,typeof 数组,typeof 对象 都 返回的是object
+			var m1;
+			console.log(typeof m1);//"undefined"
+			//输入 任意字符,注意不是字符串(其实相当于不存在的对象),typeof都会返回undefined
+			//这一点应用很关键,可以根据传入的字符串,名称空间,创建对象,参见js-demo/D02NS.html
+			console.log(typeof efwkabc);//undefined
+			//同上,age这个变量未定义,typeof age 返回 undefined
+			console.log(typeof age);//undefined
+			
+			var m11=false;
+			console.log(typeof m11);//boolean
+			var m2="";
+			console.log(typeof(m2));//string
+			var m22=11;
+			console.log(typeof m22);//number
+			//以下返回object,包括null,[],{}
+			var m3=null;
+			console.log(typeof m3);//object
+			var m4=[];
+			console.log(typeof m4);//object
+			var m5={};
+			console.log(typeof m5);//object
+			
+			var m6=function(){}
+			console.log(typeof m6);//function
+			
+			var a1;
+			console.log(a1==undefined);//true
+			
+			console.log(null==undefined);//true
+			
+		//5.Boolean()相当于!!
+			console.log("--05.Boolean()--");
+			var a2="hello world";
+			var a3=Boolean(a2);
+			console.log(Boolean(a2));//true
+			console.log(!!a2);//true
+			console.log(typeof a3);//boolean
+		//!!!!  Boolean()的判断依据:
+			//String类型为空串返回false,Number类型为0返回false,Object类型为null返回false,Undefined类型,NaN
+			//即在条件表达式中.if(空串,0,null,undefined,NaN)返回false
+			console.log(Boolean(""));//false
+			console.log(Boolean(" "));//true,!!非空串
+			console.log(Boolean(0));//false
+			console.log(Boolean(0.0));//false
+			console.log(Boolean(NaN));//false
+			console.log(Boolean(-1));//true
+			console.log(Boolean(null));//false
+			console.log(Boolean(undefined));//false
+			
+			
+		//一.Number类型
+		console.log("--以下是Number类型的demo--");
+			console.log(Number.MAX_VALUE);
+			console.log(Number.MIN_VALUE);
+			//是否为无穷大
+			console.log(isFinite(Number.MAX_VALUE));//true
+			//NaN和任何都不等(包括NaN)
+			console.log(NaN==NaN);//false
+			console.log(NaN===NaN);//false
+			console.log(1/0);//Infinity
+			//isNaN()
+			console.log(isNaN("true"));
+			
+		//转换为数值.Number(),parseInt(),parseFloat()
+			console.log("---Number().....");
+			console.log(Number("Hello"));//NaN
+			console.log(Number(""));//0
+			console.log(Number("0001"));//1
+			console.log(Number(true));//1
+			//parseInt()
+			console.log(parseInt("123blue"));//123
+			console.log(parseInt(""));//NaN
+			console.log(parseInt("0xA"));//10
+			//toString():null和undefined没有该方法
+			var b1=11;
+			console.log(b1.toString());//11
+			var b2=true;
+			console.log(b2.toString());//true
+		
+		//String():转成String
+			console.log(String(null));//"null"
+			console.log(String(undefined));//"undefined"
+			console.log(String("a"));
+			
+		//二.string类型
+			console.log("--string类型--");
+			var str1="hello world";
+			str1.charAt(1);
+			str1.charCodeAt(1);
+			
+			//concat拼接任意多个字符
+			str1.concat("a","b","c");
+			str1=str1+"aa"+"bb"+"cc";
+			
+			//slice(),substr(),substring()均返回原字符串的副本,不对原字符串产生影响
+			//slice(start,end)和substring(start,end)相同,含头不含尾
+			//substr(start,count)
+			var str2="hello world";
+			
+			//indexOf(),lastIndexOf()
+			//stringObject.indexOf(searchvalue,fromindex)
+			console.log(str2.indexOf("h",2));//从下标2处往后搜索
+			
+			//trim()
+			
+			//toLowerCase(),toLocaleLowerCase()
+			
+			//str.match(expReg),相当于exp.exec().返回string[]数组
+			//str.search(expReg):返回第一个匹配项的索引,未匹配返回-1
+			//str.replace("reg","new");js中的replace("reg","new")相当于java中的replaceAll("reg","new"),使用正则
+			
+			//split(",")拆分
+			//var arr=str.split(",");按照指定字符拆分成数组[]
+			
+			
+			
+		//三.Object类型
+			var o1=new Object();
+			var o2=new Object;
+			o1.age=1;
+			o1.valueOf=function(){
+				return "heh";
+			}
+			console.log("Object...");
+			console.log(o1.age);
+			console.log(o1.hasOwnProperty("age"));//true
+			console.log(o1.hasOwnProperty("name"));
+			console.log(o1.hasOwnProperty("valueOf"));
+			
+			//<	小于号 !!! 默认按照ascii码大小比较
+			console.log("比较<");
+			console.log("23"<3);//false
+			console.log("23"<"3");//true
+			console.log("Black"<"app");//true
+			//任何操作数与NaN比较都返回false
+			console.log(NaN<3);//false
+			console.log(NaN>=3);//false
+			console.log("a"<3);//"a"先转换为数字,结果为NaN
+			console.log(NaN==NaN);//false
+			console.log(NaN=="NaN");//false
+			console.log(5==NaN);//false
+			console.log(false==0);//true
+			//===:需要值相等且类型相等
+			console.log("55"===55);//false
+			
+			
+		//四.Function类型
+			function sayHi(name,message){
+				console.log("Method sayHi"+name+message);
+			}
+			//调用sayHi()函数
+			sayHi("zc","haha");
+			//带返回值的函数
+			function sayHe(){
+				return "abc";
+			}
+			console.log(sayHe());
+			
+			//return;返回undefined
+			function sayHa(){
+				return;
+			}
+			console.log(sayHa());//undefined
+			
+			//参数arguments
+			function sayHb(){
+				for(var i=0;i<arguments.length;i++){
+					console.log(arguments[i]);
+				}
+				console.log("---");
+			}
+			sayHb();
+			sayHb("a");
+			sayHb("a","b");
+			sayHb("1","a",2);
+			//若没有传参数,为undefined
+			function sayHc(name,age){
+				console.log(name+','+age);
+			}
+			//只传一个参数,则age为undefined
+			sayHc("zc");
+		</script>
+	</head>
+	<body>
+		
+	</body>
+</html>

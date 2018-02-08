@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/jquery-2.2.3.min.js"></script>
+		<script>
+			//js参数传递机制
+			//js多个返回值
+			$(function(){
+				var m,n;
+				a(m,n);
+				console.log(m+n);//NaN
+				
+				var result=b(m,n);
+				console.log(result.m+result.n);
+			});
+			var a=function(m,n){
+				m=4;
+				n=3;
+			}
+			
+			var b=function(m,n){
+				return {"m":4,"n":3};
+			}
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

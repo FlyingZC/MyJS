@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/jquery-2.2.3.min.js"></script>
+		<script>
+			$(function(){
+				var arr=[1];
+				var str="1";
+				console.log(arr.indexOf(str));
+				console.log(arr.indexOf(parseInt(str)));
+				var originalOwnProductIds=[1,3,4];
+				var ownProductIds=[2,3,5];
+				opFun(originalOwnProductIds,ownProductIds);
+			});
+			
+			var opFun=function(originalOwnProductIds,ownProductIds){
+				var delProductIds = [],addProductIds = [];
+				//原先有,现在没有,删除
+				//debugger;
+				for(var i = 0; i < originalOwnProductIds.length; i++) {
+					if(ownProductIds.indexOf(originalOwnProductIds[i]) == -1) {
+						delProductIds.push(originalOwnProductIds[i]);
+					}
+				}
+				//原先没有,现在有,添加
+				for(var i = 0; i < ownProductIds.length; i++) {
+					if(originalOwnProductIds.indexOf(ownProductIds[i]) == -1) {
+						addProductIds.push(ownProductIds[i]);
+					}
+				}	
+			}
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

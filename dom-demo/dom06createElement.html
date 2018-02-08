@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>dom06createElement,createTextNode</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<script>
+	//创建元素结点,文本节点
+	//创建一个<li name="xuzhou">徐州文本</li>结点添加到<ul>下
+		window.onload=function(){
+			//创建元素结点
+			var liNode=document.createElement("li");
+			//创建文本节点
+			var txtNode=document.createTextNode("徐州文本");
+			//文本节点作为元素结点的子节点
+			liNode.appendChild(txtNode);
+			//为liNode创建属性结点
+			var attrNode=liNode.setAttribute("name","xuzhou");
+			//添加到html中的某个结点下
+			var cityNode=document.getElementById("city");
+			cityNode.appendChild(liNode);
+		}
+	</script>
+  </head>
+  
+  <body>
+	<p>你喜欢哪个城市?</p>
+		<ul id="city">
+			<li id="bj" name="BeiJing">北京</li>
+			<li>上海</li>
+			<li>东京</li><li>首尔</li>
+		</ul>
+  </body>
+</html>

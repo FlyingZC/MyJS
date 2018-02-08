@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/vue.js"></script>
+		<script>
+			//1.1vue需要在$();中,页面dom加载完成后执行
+			$(function(){
+				var app = new Vue({
+					el: '#app',
+					data: {
+						message: 'Hello Vue!'
+					}
+				})
+				var app2=new Vue({
+					el:'#app-2',
+					data:{
+						message:new Date()
+					}
+				})
+				
+				var app3=new Vue({
+					el:'#app-3',
+					data:{
+						seen:false
+					}
+				})
+				
+				var app4=new Vue({
+					el:'#app-4',
+					data:{
+						todos:[
+							{text:'学习js'},
+							{text:'学习vue'},
+							{text:'heheh'}
+						]
+					}
+				})
+				
+				var app5=new Vue({
+					el:'#app-5',
+					data:{
+						message:'Hello Vue'
+					},
+					methods:{
+						reverseMsg:function(){
+							//split成数组,reverse反转数组.join数组到str
+							this.message=this.message.split('').reverse().join('');
+							//可以通过app.data属性 更改其他app中的属性值
+							app4.todos.push({text:'新添加'});
+						}
+					}
+				});
+				
+			});
+		</script>
+	</head>
+
+	<body>
+		1.2声明式渲染
+		<div id="app">
+			{{ message }}
+		</div>
+		
+		1.3绑定dom属性   v-bind:xxx="xxx"
+		<div id="app-2">
+			<!--1.3.1将span的title和app2中的message属性对应<span title="Wed Mar 15 2017 13:19:12 GMT+0800 (中国标准时间)"></span>-->
+			<span v-bind:title="message">
+				
+			</span>
+		</div>
+		
+		1.4条件与循环  v-if="xxx"
+		<div id="app-3">
+			<!--v-if中的属性值为true时可见-->
+			<p v-if="seen">可见</p>
+		</div>
+		
+		<!--v-for-->
+		<div id="app-4">
+			<ol>
+				<li v-for="todo in todos">
+					{{todo.text}}
+				</li>
+			</ol>
+		</div>
+		
+		1.5处理用户输入
+		<!--v-on指令 绑定一个调用Vue实例方法的事件监听器-->
+		<div id="app-5">
+			<p>{{message}}</p>
+			<button v-on:click="reverseMsg">逆转消息</button>
+		</div>
+		
+	</body>
+	
+	
+
+</html>

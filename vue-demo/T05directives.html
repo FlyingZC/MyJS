@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>指令directives</title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/vue.js"></script>
+		<script>
+			$(function() {
+				var app1 = new Vue({
+					el: '#app-1',
+					data: {
+						seen: false,
+						myUrl: 'www.baidu.com',
+						okData: true,
+						items: [
+							{ message: 'Foo' },
+							{ message: 'Bar' }
+						],
+						object: {
+							FirstName: 'John',
+							LastName: 'Doe',
+							Age: 30
+						}
+
+					},
+					methods: {
+						doSomething: function() {
+							console.log("--myMethod--");
+						}
+					}
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		指令是带有v-前缀的特殊属性
+		<div id="app-1">
+			<div v-if="seen">Now you can see</div>
+			<a v-bind:href='myUrl'>连接</a>
+			<button v-on:click="doSomething">点我</button> template作为v-if条件组 使用template模板,使得v-if,v-for可以作用于多个元素
+			<template v-if="okData">
+				<h1>Title</h1>
+				<p>Paragraph 1</p>
+				<p>Paragraph 2</p>
+			</template>
+			<div v-else-if="okData==2"></div>
+			<div v-else>aiaiia</div>
+
+			<div v-show="okData">v-show.........</div>
+
+			v-for迭代数组
+			<ul id="example-2">
+				<li v-for="(item, index) in items">
+					{{ parentMessage }} - {{ index }} - {{ item.message }}
+				</li>
+			</ul>
+			v-for迭代一个对象
+			<ul id="repeat-object" class="demo">
+				<li v-for="value in object">
+					{{ value }}
+				</li>
+			</ul>
+			可指定第二个参数为键名,第三个参数为索引
+			<div v-for="(value, key, index) in object">
+				{{ index }}. {{ key }} : {{ value }}
+			</div>
+			遍历10次
+			<div>
+			  <span v-for="n in 10">{{ n }}</span>
+			</div>
+		</div>
+
+	</body>
+
+</html>

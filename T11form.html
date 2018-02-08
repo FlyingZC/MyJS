@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<form id="form1">
+			<input type="text" value="1" id="username"/><br>
+			<select id="se" >
+				<option value="-1">--请选择--</option>
+				<option value="a">AAA</option>
+			</select>
+		</form>
+	</body>
+	<script>
+		var form=document.forms["form1"];
+		//form.submit();
+		form.reset();
+		form.elements[0];
+		var field=form.elements["username"];
+		field.disabled=true;
+		field.focus();
+		
+		var select=form.elements["se"];
+		//add(newOption,beforeOption):在相关项之前插入option
+		//select.add();
+		select.options;//所有<option>
+		//select.remove(0);//移除option
+		select.selectedIndex;//选中的索引,从0开始
+		//select框的type属性 为select-one或select-multiple,取决于multiple属性
+		var opt1=select.options[0];
+		opt1.getAttribute("value");
+		opt1.value;
+		opt1.text;
+		
+		select.onchange=function(){
+			//访问选中项
+			var selectedOpt=select.options[select.selectedIndex];
+			alert(selectedOpt.text+selectedOpt.value);
+			addNewOpt(select);
+		}
+		
+		var addNewOpt=function(selectbox){
+			var newOpt=document.createElement("option");
+			newOpt.appendChild(document.createTextNode("OptionText"));
+			newOpt.setAttribute("value","optval1");
+			selectbox.appendChild(newOpt);
+		}
+	</script>
+</html>

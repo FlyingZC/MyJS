@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script>
+		var indexAndMoney={};
+			$(function(){
+				var arr=["0.5万","10-12万","7-9万","2万","3-4万"];
+				console.log("--init--");
+				init(arr);
+				
+				console.log("--add--");
+				add(arr,"6-7万");
+				
+				console.log("--remove--");
+				remove(arr,"6-7万");
+			});
+			
+			function remove(arr,moneyStr){
+				var moneyIndexNum=money2Number(arr[arr.length-1]);
+				//原始数组中移除
+				arr.splice(arr.indexOf("7-9万"),1);
+				//Map中移除
+				delete indexAndMoney[moneyIndexNum];
+				//输出
+				var sortedIndexArr=convertObj2SortedArray(indexAndMoney);
+				printKV(sortedIndexArr);
+			}
+			
+			function add(arr,moneyStr){
+				arr.push(moneyStr);
+				var moneyIndexNum=money2Number(arr[arr.length-1]);
+				putIndexAndMoneyToMap(moneyIndexNum,moneyStr);
+				var sortedIndexArr=convertObj2SortedArray(indexAndMoney);
+				printKV(sortedIndexArr);
+			}
+			
+			function init(arr){
+				for(var i=0;i<arr.length;i++){
+					var moneyIndexNum=money2Number(arr[i]);
+					putIndexAndMoneyToMap(moneyIndexNum,arr[i]);
+				}
+								
+				var sortedIndexArr=convertObj2SortedArray(indexAndMoney);
+				printKV(sortedIndexArr);
+			}
+			
+			var printKV=function(sortedIndexArr){
+				for(var i=0;i<sortedIndexArr.length;i++){
+					console.log(indexAndMoney[sortedIndexArr[i]]);
+				}
+			}
+			
+			var money2Number=function(moneyStr){
+				var moneyIndexNum;
+				if(moneyStr.indexOf("-"!=-1)){
+					moneyIndexNum=moneyStr.substring(0,moneyStr.indexOf("-"));
+				}else{
+					moneyIndexNum=moneyStr.substring(0,moneyStr.length-1);
+				}
+				return moneyIndexNum;
+			}
+			
+			var putIndexAndMoneyToMap=function(moneyIndexNum,moneyStr){
+				indexAndMoney[Number(moneyIndexNum)]=moneyStr;
+			}
+			
+			function convertObj2SortedArray(obj){
+				var sortedIndexArr=[];
+				for(var p in obj ){
+					sortedIndexArr.push(p);
+				}
+				sortedIndexArr.sort(function(a,b){//数组自定义排序
+					return a-b;
+				});
+				console.log(sortedIndexArr);
+				return sortedIndexArr;
+			}
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

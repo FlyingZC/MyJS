@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>遍历所有li,单击每个li获取当前li的信息</title>
+		<style type="text/css">
+			li:hover{
+				cursor:pointer;
+			}
+		</style>
+		<script type="text/javascript">
+			window.onload=function(){
+				var lis=document.getElementsByTagName("li");
+				for(var i=0;i<lis.length;i++){
+					//正常遍历使用lis[i]下标访问
+					var v=lis[i].firstChild.nodeValue;
+					console.log(v);
+					//只有添加单击事件时,才可能使用this
+					lis[i].onclick=function(){
+						console.log(this);
+					}
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<p>你喜欢哪个城市?</p>
+		<ul id="city">
+			<li id="bj" name="BeiJing">北京</li>
+			<li>上海</li>
+			<li>东京</li>
+			<li>首尔</li>
+		</ul>
+		
+		<br><br>
+		<p>你喜欢哪款单机游戏?</p>
+		<ul id="game">
+			<li id="rl">红警</li>
+			<li>实况</li>
+			<li>极品飞车</li>
+			<li>魔兽</li>
+		</ul>
+		
+		<br><br>
+		name: <input type="text" name="username" id="name" />
+	</body>
+</html>	

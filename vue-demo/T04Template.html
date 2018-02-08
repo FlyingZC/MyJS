@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>模板语法{{}}插值</title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/vue.js"></script>
+		<script>
+			$(function(){
+				var app1=new Vue({
+					el:'#app-1',
+					data:{
+						msg:'h哈哈',
+						myHtml:"<input/>",
+						sex:'m',
+						id:1000
+					}
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="app-1">
+			双{{}}会将数据解释成纯文本
+			<div v-once>只更新一次值后不再改变{{msg}}</div>
+			v-html标签将内容解释为html
+			<div v-html="myHtml"></div>
+			支持js表达式
+			<div>{{true?'yes':'no'}}</div>
+			<div>{{msg.concat('呵呵呵')}}</div>
+			绑定dom属性
+			<div v-bind:id="'list-'+id"></div>
+		</div>
+		
+	</body>
+</html>

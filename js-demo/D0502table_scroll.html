@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-1.11.3.js"></script>
+		<script>
+			$(document).ready(function() {
+				//区分向上还是向下滚动
+				//body对象  
+				var table = $("#TB1");
+				//table高度  
+				var bh = table.height();
+
+				//加载窗体滑动事件  
+				$(table).scroll(function() {
+					clearTimeout(myTimeout);
+				    myTimeout = setTimeout(function() {
+
+				    }, 1000);
+					
+				})
+			});
+
+			function loaddata(sh) {
+				var html = "<div>test"+sh+"</div>";
+				$('body').append(html);
+			};
+		</script>
+	</head>
+
+	<body>
+		<table id="TB1" style="height:300px;">
+
+		</table>
+
+	</body>
+
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			window.onload=function(){
+				a(1,2);
+				b();
+			}
+			function a(m,n){
+				return m+n;
+			}
+			function b(){
+				console.log(b);
+				c();
+			}
+			function c(){
+				for(var i=0;i<10;i++){
+					console.log(i);
+				}
+			}
+		</script>
+	</head>
+	<body>
+		hehe
+	</body>
+</html>

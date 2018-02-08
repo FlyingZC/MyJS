@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>循环输出数组</title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="handlebars-v4.0.10.js"></script>
+		<script id="tpl" type="text/x-handlebars-template">
+			{{#if list}}
+			<ul id="list">
+				{{#each list}}
+				<li>{{this}}</li>
+				{{/each}}
+			</ul>
+			{{else}}
+			<p>{{error}}</p>
+			{{/if}} 
+			<br>
+			
+			<p>使用unless</p>
+			{{#unless data}}
+			<p>unless不存在时输出</p>
+			{{/unless}}
+			<br>
+			
+			{{debug}}
+			
+			<div class="entry">
+				<p>使用with</p>
+			  <h1>{{title}}</h1>
+			  {{#with author}}
+			  <h2>By {{firstName}} {{lastName}}</h2>
+			  {{/with}}
+			</div> 
+			
+			{{!handlebars中的注释写法}}
+			
+		</script>
+		<script>
+			//这里{{#if}}判断是否存在list数组，如果存在则遍历list，如果不存在输出错误信息
+			$(function() {
+				//用jquery获取模板
+				var tpl = $("#tpl").html();
+				//原生方法
+				var source = document.getElementById('tpl').innerHTML;
+				//预编译模板
+				var template = Handlebars.compile(source);
+				//模拟json数据
+				var contentJson = {
+					info: ['HTML5', 'CSS3', "WebGL"],
+					"error": "数据取出错误",
+					title: "My first post!",
+					author: {
+					    firstName: "Charles",
+					    lastName: "Jolley"
+					}
+				};
+				//匹配json内容
+				var html = template(contentJson);
+				//输入模板
+				$('body').html(html);
+				
+				
+			});
+		</script>
+	</head>
+
+	<body>
+
+	</body>
+
+</html>

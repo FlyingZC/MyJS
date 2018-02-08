@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			var Person=function(name){
+				this.name=name;
+			}
+			//给prototype起别名
+			Person.fn=Person.prototype;
+			Person.fn.run=function(){
+				console.log("run");
+			}
+			var alice=new Person("alice");
+			alice.run();
+			
+			//二.
+			var MyClass=function(){
+				var klass=function(){
+					console.log(this.init);
+					this.init.apply(this,arguments);
+				};
+				klass.prototype.init=function(){
+					
+				};
+				return klass;
+			};
+			
+			var Person2=new MyClass();
+			console.log(Person2);
+			Person2();
+			Person2.prototype.init=function(){
+				
+			}
+			
+			//三.区分静态属性 和 实例属性
+			var MyClass3=function
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

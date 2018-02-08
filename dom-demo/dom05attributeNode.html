@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>dom05属性结点</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<script>
+		window.onload=function(){
+			//1.通过元素结点调用setAttribute()方法修改该元素结点的属性结点的值
+			var liNode=document.getElementById("bj");
+			//若这个属性已经存在,它的值将被刷新.若不存在,setAttribute()方法将先创建它再为其赋值
+			liNode.setAttribute("name","NanJing");
+			var a=liNode.getAttribute("name");
+			console.log(a);//NanJing
+			//2.通过元素结点获取属性结点,再调用属性结点的相关属性
+			var aNode=liNode.getAttributeNode("name");
+			//属性结点名
+			console.log(aNode.nodeName);//name
+			//属性结点值
+			console.log(aNode.nodeValue);//NanJing
+			//属性结点类型
+			console.log(aNode.nodeType);//2
+			aNode.nodeValue="XuZhou";
+			console.log(aNode.nodeValue);//XuZhou
+		}
+	</script>
+  </head>
+  
+  <body>
+	<p>你喜欢哪个城市?</p>
+		<ul id="city">
+			<li id="bj" name="BeiJing">北京</li>
+			<li>上海</li>
+			<li>东京</li><li>首尔</li>
+		</ul>
+  </body>
+</html>

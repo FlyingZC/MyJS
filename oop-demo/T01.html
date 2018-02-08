@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			function Shape(){
+				//this.name='shape啊';
+				/*this.toString=function(){
+					return this.name;
+				}*/
+			}
+			//原型中适合放置 不可变(共享)的属性,或共享性方法
+			Shape.prototype.name='shape啊';
+			Shape.prototype.toString=function(){
+				return this.name;
+			}
+			
+			function TwoDShape(){
+				//this.name="2D图形";
+			}
+			//继承!!!注意继承的时机,要在拓展当前类型的原型对象 之前 完成继承(这样在之后对原型对象中新增属性或方法才能有)
+			//若先向原型中添加属性或方法,后继承(此时相当于 原型对象呗重写,之前向原型中添加的属性或方法就失效了)
+			//Shape对象 覆盖TwoDShape的原型对象
+			TwoDShape.prototype=new Shape();
+			//拓展原型
+			TwoDShape.prototype.name='2D图形';
+			
+			
+			function Triangle(side,height){
+				
+				this.side=side;
+				this.height=height;
+				/*this.getArea=function(){
+					return this.side*this.height/2;
+				};*/
+			}
+			//先继承
+			Triangle.prototype=new TwoDShape();
+			//再拓展原型
+			Triangle.prototype.name='Triangle图形';
+			Triangle.prototype.getArea=function(){
+					return this.side*this.height/2;
+				};
+			
+			//修改构造器
+			TwoDShape.prototype.constructor=TwoDShape;
+			Triangle.prototype.constructor=Triangle;
+			
+			var my=new Triangle(5,20);
+			my.getArea();
+
+			//调用toString()步骤
+			//遍历my对象中的所有属性->查看my._proto_所指向的对象(即那个new TwoShape()对象)
+			//->检测new TwoShape()的_proto_属性,即new Shape()对象
+			my.toString();
+			
+			Shape.prototype.isPrototypeOf(my);
+			TwoDShape.prototype.isPrototypeOf(my);
+			Triangle.prototype.isPrototypeOf(my);
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

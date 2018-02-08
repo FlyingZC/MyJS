@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+		//继承
+		function SuperType(){
+			this.name="Super类型";
+		}
+		SuperType.prototype.getSuperValue=function(){
+			return this.name;
+		}
+		//prototype中的属性方法  为 所有实例共享
+		console.log(new SuperType().getSuperValue());
+		
+		//子类
+		function SubType(){
+			this.subName="子类型";
+		}
+		
+		//原型继承,则SubType所有实例中 都拥有SuperType中的属性
+		SubType.prototype=new SuperType();
+		//定义自己的getSubValue方法
+		SubType.prototype.getSubValue=function(){
+			return this.subName;
+		}
+		//重写父类中的getSuperValue方法
+		SubType.prototype.getSuperValue=function(){
+			return "zx";
+		}
+		
+		//创建子类型
+		var subInstance=new SubType();
+		console.log(subInstance.getSubValue());
+		console.log(subInstance.getSuperValue());
+		console.log(subInstance instanceof SubType);
+		console.log(subInstance instanceof SuperType);
+		console.log(subInstance instanceof Object);
+		
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+

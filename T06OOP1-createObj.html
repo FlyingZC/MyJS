@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>面向对象-创建对象</title>
+		<script>
+			window.log = console.log;
+//=====================  一.创建对象  ========================
+			//(1)
+			var person=new Object();
+			person.name="zc";
+			person.age=1;
+			person.sayHello=function(){
+				console.log(person.name);
+			}
+			
+			//(2)字面量方式
+			var people={
+				name:"zx",
+				age:11,
+				sayHello:function(){
+					console.log(this.name);
+				}
+			};
+			
+			//(3)
+			var man={};
+			Object.defineProperty(man,"name",{
+				writable:false,
+				value:"zx"
+			});
+			console.log(man.name);
+			man.name=1;//修改无效,因为writable为false
+			console.log(man.name);
+			
+			console.log("--getter,setter--");
+			//定义getter和setter方法
+			/*var book={
+				year:204,
+				editor:"zx"
+			};
+			Object.defineProperty(book,"year",{
+				get:function(){
+					return this.year;
+				},
+				set:function(newVal){
+					this.year=newVal;
+				}
+			});
+			book.year=2111;*/
+			
+			
+			//定义多个属性
+		    //(4)工厂模式.缺点,无法得知获取的对象的具体类型
+			function createPerson(name,age,job){
+				var o=new Object();
+				o.name=name;
+				o.age=age;
+				o.sayName=function(){
+					console.log(this.name);
+				}
+				return o;//返回Person对象
+			}
+			//工厂模式 与 后面 寄生模式的区别.此处工厂模式直接调用(不使用new),相当于把createPerson看成普通函数.只是这个函数内部实现了创建对象的操作
+			//而寄生模式把最外层createPerson看成构造函数,使用new调用
+			var person1=createPerson("zx",11,"jj");
+
+			//(5)构造函数模式,构造器.缺点每次new创建的都是新的对象
+			//任何函数,只要通过new操作符来调用,都可以作为构造函数
+			//所谓"构造函数"，其实就是一个普通函数，但是内部使用了this变量。
+			//对构造函数使用new运算符，就能生成实例，并且this变量会绑定在实例对象上。
+			//缺点:每个方法都要在 每个实例上重新创建一遍
+			function Person(name,age,job){
+				this.name=name;
+				this.age=age;
+				//其实相当于this.sayName=new Function(){console.log(this.name);}
+				this.sayName=function(){
+					console.log(this.name);
+				}
+			}
+			var person2=new Person("zx",11,"sf");
+			//每个对象有个constructor属性指向它的构造函数
+			console.log(person2.constructor==Person);//true
+			console.log(person2 instanceof Person);
+			
+			//构造函数的调用
+			//(1)使用new调用
+			var per=new Person("z",1,"f");
+			
+			//(2)作为普通函数调用(此时不把它看做构造函数)
+			//此时,Person的属性和方法 都 会被 添加给window对象
+			Person("windowName",1,"f");
+			//则可以通过window对象调用sayName方法
+			window.sayName();
+			//(3)
+			var obj=new Object();
+			//在obj环境中调用Person
+			Person.call(obj,"personName",1,"s");
+			obj.sayName();
+				
+			
+			
+			console.log("--原型模式--");
+			//(6)创建原型对象
+			//每个函数都有一个prototype属性,该属性是一个指针,指向一个对象,
+			//该对象的用途是包含可以由特定类型的  所有实例共享的属性和方法(相当于java中的静态变量 和 静态方法)
+			//原型可以让所有实例对象共享   该原型   包含的属性和方法
+			//缺点:对于基本数据类型的原型属性,可以通过在对象中添加同名属性来屏蔽
+			//但是对于 引用类型的 原型属性,问题突出(因为该属性只有一份,共所有实例对象共享)
+			function Teacher(){
+				//prototype属性指向函数的 原型对象
+				//定义原型属性的第一种方式
+				Teacher.prototype.name="ZXX";
+			};
+			
+			//如果此时先创建一个对象,再完全重写原型,即接下来的代码.见129行
+			var oldTeacher=new Teacher();
+			
+			//定义原型属性的第二种方式
+			//这种方式定义原型,相当于重写了prototype函数.
+			//此时Teacher.prototype.constructor不再指向Teacher函数,而是指向Object构造函数
+			Teacher.prototype={
+				//可以直接指定constructor属性,但这样导致constructor变得可以枚举
+				//constructor:Teacher,
+				name:"nick",
+				age:25,
+				job:"he",
+				sayName:function(){
+					console.log(this.name);
+				}
+			};
+			//使用这种方式,重设原型中的constructor属性,可以设置为不可枚举
+			Object.defineProperty(Teacher.prototype,"constructor",{
+				enumerable:false,
+				value:Teacher
+			});
+			//由于重写原型对象(相当于new了)  发生 在 创建该对象之后,
+			//该对象中隐含的[[prototype]]属性指向的还是之前的原型对象,所以报错,找不到该方法
+			//若不完全重写原型对象,而是只向原型对象中添加某个方法,不会发生这种情况
+			//oldTeacher.sayName();
+			
+			//所有原型对象都拥有一个constructor属性
+			console.log(Teacher.prototype.constructor);
+			var teacher1=new Teacher();
+			
+			//判断Teacher的原型对象  是 teacher1这个对象的 原型对象吗
+			console.log(Teacher.prototype.isPrototypeOf(teacher1));//true
+			console.log(Object.getPrototypeOf(teacher1)==Teacher.prototype);//true
+			
+			//读取对象的某个属性的流程:实例对象(person1有sayName属性吗)->原型对象(person1的原型有sayName属性吗)
+			
+			//teacher1对应的原型为Teacher
+			console.log(Object.getPrototypeOf(teacher1));
+			//实例可以覆盖原型中的属性.让原型中的属性失效.(但是不会修改原型中的属性值)
+			teacher1.name="newNickccc";
+			console.log(teacher1.name);//newNickccc
+			
+			//delete 可以删除对象实例中的属性,却不能删除原型中属性
+			delete teacher1.name;
+			console.log(teacher1.name);//nick
+			
+			//hasOwnProperty检测一个属性来自实例还是来自prototype
+			console.log(teacher1.hasOwnProperty("name"));//
+			
+			//in,只要一个属性可以访问,无论是实例还是来自prototype均返回true
+			console.log("name" in teacher1);//true
+			
+			//同时使用hasOwnProperty()和in操作符,可以确定该属性到底存在于对象还是原型中
+			function myHasPrototypeProperty(obj,name){
+				return !obj.hasOwnProperty(name)&&(name in obj);
+			}
+			
+			//keys:返回实例中所有 可枚举 的属性的字符串数组
+			console.log(Object.keys(teacher1));
+			
+			//无论实例属性是否可以枚举,都可以获取,传入的是对象
+			console.log(Object.getOwnPropertyNames(teacher1));
+			
+			//原生引用类型(Object,Array,String等)都是在其构造函数的原型上定义了方法.
+			console.log(typeof Array.prototype.sort);//function
+			
+			//若Array.prototype中有sort()方法
+			//可修改,或添加方法
+			String.prototype.zc=function(){
+				console.log("这是自定义zcString中的方法");
+			}
+			var strz="zc";
+			strz.zc();
+			
+			//加入属性都定义在原型中(尤其是引用类型) ,带来的问题
+			console.log("--原型带来的问题--");
+			function A(){
+				
+			}
+			
+			A.prototype={
+				constructor:A,
+				name:"zc",
+				friends:["a","b"],
+				sayName:function(){
+					console.log(this.name);
+				}
+			}
+			
+			var a1=new A();
+			var a2=new A();
+			a1.friends.push("c");
+			console.log(a1.friends);//[a,b,c]
+			console.log(a2.friends);//[a,b,c]
+			console.log(a1.friends==a2.friends);//true
+			
+	//(7)构造函数模式 与 原型模式结合  创建对象 !!!!!!!
+			//构造函数定义每个实例私有的属性
+			function Student(name,age){
+				this.name=name;
+				this.age=age;
+				this.frineds=["a","b"];
+			}
+			//原型定义实例共有的属性,方法默认一份,所以也定义在原型中(没必要每次都创建新的方法,因为功能相同)
+			Student.prototype={
+				constructor:Student,
+				sayName:function(){
+					console.log(this.name);
+				}
+			}
+			var stu1=new Student("zxx",23);
+			var stu2=new Student("zax",24);
+			stu1.frineds.push("c");
+			console.log(stu1.frineds);
+			console.log(stu2.frineds);
+			console.log(stu1.frineds==stu2.frineds);//false
+			console.log(stu1.sayName==stu2.sayName);//true
+			
+			
+	//(8)动态原型 模式  创建对象
+			//若构造方法中有该属性,则不添加到原型中.若没有,则添加
+			function Student2(name,age){
+				this.name=name;
+				this.age=age;
+				//方法
+				//若没有sayName方法
+				if(typeof this.sayName!="function"){
+					Student2.prototype.sayName=function(){
+						console.log(this.name);
+					}
+				}
+			}
+			
+			
+	//(9)寄生构造函数模式  创建对象    与工厂模式区别!!!
+		//区别: 除了使用 new 操作符 并 把使用的包装函数 叫做 构造函数之外. 这个模式与工厂模式 完全相同
+			//思想:创建一个函数,仅仅封装创建对象的代码,然后再返回新创建的对象.
+			//优点:不会破换原来的原型对象
+			//缺点:寄生模式  返回的对象 与 构造函数 或 [构造函数的原型对象] 之间没有关系,不能用instanceof判断对象类型
+			log("--9寄生构造函数模式--");
+			function PersonJ(name,age,job){//寄生模式,最外层看做构造函数(最后使用new PersonJ()调用),只是最终return的是内部创建的o对象.   工厂模式把最外层看成一个普通函数,内部创建对象并返回而已
+				var o = new Object();//创建一个新对象
+				//向新对象中添加属性 和 方法
+				o.name=name;
+				o.age=age;
+				o.job=job;
+				o.sayName=function(){
+					console.log(this.name);
+				};
+				//返回 新创建的对象. 默认构造函数在不返回值的情况下默认会返回新创建的对象实例.
+				return o;//而 return xxx;会返回该创建的对象
+			}
+	
+			//(9)-2寄生模式的具体使用实例:创建一个具有特殊方法的 数组
+			function specialArray(){
+				var valueArr=new Array();
+				//要调用的方法   .apply   (作用域                        ,      参数数组)
+				//valueArr.push为方法        valueArr为作用域对象           arguments为参数数组
+				//即 调用valueArr这个数组对象的push方法,将arguments数组内容 赋值给valueArr.此句执行后valueArr=["red","green","blue"]
+				//这里也能看出来apply的作用,改变方法执行的作用域.省的用that来指代valueArr了
+				valueArr.push.apply(valueArr,arguments);
+				//添加方法
+				valueArr.toMyString=function(){
+					return this.join("-");
+				}
+				//返回对象
+				return valueArr;
+			}
+			
+			var colors = new specialArray("red","green","blue");//使用 new调用寄生构造函数
+			console.log(colors.toMyString());
+	
+	//(10)稳妥构造函数 模式 创建对象  为何不用new(这个模式就是为了不使用new)??????
+	    	//特点:没有公共属性,其方法不引用this的对象.适合在安全环境中使用
+	    	//稳妥构造函数 和 寄生构造函数类似,但区别为:1.创建新对象的实例方法不引用this 2.不使用new调用构造函数
+			function PersonW(name,age,job){
+				//创建要返回的对象
+				var o=new Object();
+				//添加自定义  私有变量 和 私有函数
+				//在外部无法直接访问该属性的原因:
+				//1.由于最终返回的是对象o,但是这个属性不包含在对象o中
+				var hobby="swim"; 
+				
+				o.sayName = function(){
+					console.log(name);
+				}
+				
+				o.getHobby = function(){
+					console.log(hobby);
+				}
+				o.setHobby = function(h){
+					hobby = h;
+				}
+				return o;
+			}
+			//在委托构造函数创建 的对象中,除了使用sayName()没有其他办法访问name的值.
+			//注意!稳妥构造函数 不使用new调用,所以不会有this一说
+			var personW1 = PersonW("zcc",22,"soft");
+			personW1.sayName();
+			personW1.getHobby();//获取属性
+			//修改属性
+			personW1.setHobby('read');
+			personW1.getHobby();
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+
+

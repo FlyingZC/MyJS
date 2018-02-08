@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>循环输出数组</title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="handlebars-v4.0.10.js"></script>
+		<script id="tpl" type="text/x-handlebars-template">
+			<ul>
+				{{#programme}}
+				<li>{{language}}</li>
+				{{/programme}}
+			</ul>
+		</script>
+		<script>
+			//#号来表示Blocks，然后通过{{/表达式}}来结束Blocks
+			$(function() {
+				//用jquery获取模板
+				var tpl = $("#tpl").html();
+				//原生方法
+				var source = document.getElementById('tpl').innerHTML;
+				//预编译模板
+				var template = Handlebars.compile(source);
+				//模拟json数据
+				var contentJson = {
+					programme: [
+						{ language: "JavaScript" },
+						{ language: "HTML" },
+						{ language: "CSS" }
+					]
+				};
+				//匹配json内容
+				var html = template(contentJson);
+				//输入模板
+				$('body').html(html);
+			});
+		</script>
+	</head>
+
+	<body>
+
+	</body>
+
+</html>

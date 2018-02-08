@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<input type="button" value="clickMe" onclick="alert(event.type)" /><br>
+		<input type="button" value="clickMe" id="btn2" onclick="alert(event.target.id)" /><br>
+		<input type="button" value="clickMe" id="btn3" onclick="alert(this.id)" /><br>
+		<input type="button" value="clickMe" id="btn4" onclick="alert(id)" /><br>
+		<form>
+			<input type="text" name="username" value="zc" /><br>
+			若该按钮包含在form中,相当于
+			function(){with(document){
+				with(this.form){
+					with(this){
+						
+					}
+				}	
+			}}<br>
+			<input type="button" value="clickMe" id="btn5" onclick="alert(username.value)" /><br>
+		</form>
+		包含try...catch<br>
+		<input type="button" value="clickMe" id="btn6" onclick="try{showMessage();}catch(ex){}" /><br>
+		<input type="button" value="clickMe" id="btn7" /><br>
+		<input type="button" value="clickMe" id="btn8" /><br>
+		
+		<ul id="u1">
+			<li>1</li>
+			<li>2</li>
+			<li>3</li>
+			<li>4</li>
+			<li>5</li>
+			<li>6</li>
+			<li>7</li>
+		</ul>
+	</body>
+	<script>
+		//1.
+		var btn7=document.getElementById("btn7");
+		btn7.onclick=function(){
+			alert(this.id);
+		}
+		//删除事件处理函数
+		//btn7.onclick=null;
+		
+		//2.
+		var btn8=document.getElementById("btn8");
+		//绑定两个点击事件,则点击一次,按顺序执行两个函数
+		btn8.addEventListener("click",function(){
+			alert(this.id);
+		},false);
+		btn8.addEventListener("click",function(){
+			alert("helloworld");
+		},false);
+		var handlerFun=function(){
+			alert("移除我把");
+		}
+		btn8.addEventListener("click",handlerFun,false);
+		//只能移除 有名的点击函数
+		//btn8.removeEventListener("click",handlerFun,false);
+		
+		var u1=document.getElementById("u1");
+		u1.onclick=function(event){
+			var muBiao=event.target;
+			//获取标签名
+			if(muBiao.tagName=="LI"){
+				muBiao.style.backgroundColor="red";	
+			}
+		}
+	</script>
+</html>

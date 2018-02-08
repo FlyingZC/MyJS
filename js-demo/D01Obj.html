@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>向对象中添加或修改属性</title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script>
+			window.log = console.log;
+			$(function(){
+				var defaultProps = {
+					"name":"zc",
+					"age":11
+				};
+				/**
+				 * 根据传入的optionObj覆盖掉原本defaultProps中属性的值
+				 * 新对象中多余的属性不会添加到旧对象中
+				 */
+				var updatePropsSet = function(optionObj){
+					if(typeof optionObj ==='object'){
+						//遍历新对象
+						$.each(optionObj, function(key,value) {
+							//若旧对象含有相同的key.
+							//不要使用optionObj[key]来判断,因为若该值为false等,可能有key但是value为false
+							if(key in defaultProps){
+								//则覆盖掉 旧对象对应的value
+								defaultProps[key]=optionObj[key];
+							}
+						});
+					}
+				}
+				
+				updatePropsSet({
+					"name":"zxx"
+				});
+				log(JSON.stringify(defaultProps));
+				
+				/**
+				 * 不管旧对象中有没有 该属性,要么添加 要么修改
+				 * @param {Object} optionObj
+				 */
+				var addAndUpdatePropsSet = function(optionObj){
+					$.each(optionObj, function(key,value) {
+						//不管 有没有 都添加或改变
+						defaultProps[key] = optionObj[key];				
+					});
+				}
+				
+				addAndUpdatePropsSet({
+					"name":"zxc",
+					"school":"xzit"
+				});
+				log(JSON.stringify(defaultProps));
+				
+				/**
+				 * 若 旧对象中有该属性不修改,若没有则添加
+				 */
+				var addPropsSet = function(optionObj){
+					$.each(optionObj, function(key,value) {
+						//旧对象 含有该属性
+						if(key in defaultProps){
+							
+						}else{
+							defaultProps[key] = optionObj[key];
+						}
+					});
+				}
+				
+				addPropsSet({
+					"name":"zxc",
+					"age":1000,
+					"school":"xzit",
+					"hobby":['swim','run']
+				});
+				log(JSON.stringify(defaultProps));
+				
+			});
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

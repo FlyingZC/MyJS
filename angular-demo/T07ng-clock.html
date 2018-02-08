@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/angular.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css" />
+		<script>
+			function MyController($scope,$timeout){
+				var updateClock=function(){
+					$scope.clock=new Date();
+					$timeout(function(){
+						updateClock();
+					},1000);
+				};
+				updateClock();
+			}
+			
+		</script>
+	</head>
+	<body>
+		<div on-controller="MyController">
+			<input ng-model="person.name" type="text" placeholder="Your name" />
+			<h1>hello {{person.name}}</h1>
+		</div>
+	</body>
+</html>

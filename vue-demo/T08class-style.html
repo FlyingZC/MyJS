@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/vue.js"></script>
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.css" />
+	<script>
+			$(function() {
+				var app1 = new Vue({
+					el: '#app1',
+					data: {
+						message: 'Hello',
+						//1.1当该值为true时,使用activeClass这个style
+						isActiveData:true,
+						hasErrorData:true
+					},
+					computed:{
+						//2.1将class绑定计算属性
+						classObject:function(){
+							//相当于返回btn-primary为
+							return{
+								"btn-primary":this.hasErrorData==false,
+								"btn-danger":this.harErrorData==true
+							}
+						}
+					}
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<div id="app1">
+			<!--1.2相当于<button class="btn btn-primary">呵呵</button>-->
+			<button v-bind:class="{btn:isActiveData,'btn-primary':hasErrorData}">呵呵</button>
+			<br/>
+			<!--2.2使用计算属性-->
+			<button v-bind:class="classObject">点我</button>
+		</div>
+	</body>
+
+</html>

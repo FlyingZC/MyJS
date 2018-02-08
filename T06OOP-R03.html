@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			window.log=console.log;
+			
+			
+			//2.
+			function Teacher(name,age){
+				this.name=name;//构造函数中的属性 会 覆盖掉原型中的属性
+				this.age=age;
+				this.sayName=function(){
+					console.log("这是构造函数中的sayName()");
+				}
+			}
+			
+			Teacher.prototype.constructor=Teacher;
+			Teacher.prototype.name="zz";
+			Teacher.prototype.sayName=function(){
+				console.log(this.name);
+			}
+			
+			var tea1 = new Teacher('xx',22);
+			tea1.sayName();
+			var tea2 = new Teacher('xz',32);
+			tea2.sayName();
+			console.log(tea1.name===tea2.name);//false
+			
+			//3.
+			log('------------3------------');
+			function Obj3(name,age){
+				
+			}
+			Obj3.prototype={
+				constructor:Obj3,
+				name:"zc",
+				setName:function(name){
+					this.name=name;//!!!!!!!!注意这一句,是向当前对象中添加属性,而不是向原型对象中添加属性
+				},
+				getName:function(){
+					return this.name;
+				}
+			}
+			var obj31 = new Obj3();
+			var obj32 = new Obj3();
+			
+			log(obj31.getName()); 
+			log(obj32.getName());
+			log(obj31.getName()===obj32.getName());
+			log(obj31.name===obj32.name);
+			
+			//修改原型属性!!但是通过this修改的实际上是 对象自己的属性,而非原型属性
+			obj31.setName('zzzzzz');
+			log(obj31.getName()); //zzzzz
+			log(obj32.getName());//zc
+			log(obj31.getName()===obj32.getName());//false
+			log(obj31.name===obj32.name);//false
+			
+			//4.先创建对象,再修改原型对象 会在新创建的对象中得到反映,因为每次都会进行查找啊
+			log("-----4---");
+			function Obj4(name,age){
+				this.name="zz";	
+			}
+			var obj41= new Obj4();
+			Obj4.prototype.sayName=function(){
+				log(this.name);
+			}
+			obj41.sayName();
+			
+			//5.但是若完全重写原型对象,则切断了原型对象 与  实例对象间的联系
+			log("-----5---");
+			function Obj5(name,age){
+				this.name="zz";	
+			}
+			var obj51= new Obj5();
+			Obj5.prototype={
+				constructor:Obj5,
+				sayName:function(){
+					log(this.name);
+				}
+			}
+			
+//=================== 原型对象 与 构造函数 使用 =======================
+			//1.组合使用 原型对象 与 构造函数
+			function Student(name,age){
+				this.name=name;
+				this.age=age;
+			}
+			Student.prototype={//原型对象
+				constructor:Student,
+				sayName : function(){
+					console.log(this.name);
+				}
+			}
+			var stu1 = new Student("zc",11);
+			stu1.sayName();
+			
+			//obj51.sayName();//error!is not a function
+			
+			
+			//2.寄生构造函数 模式
+			function Ji(){//构造函数
+				var o = new Object();
+				o.name="a";
+				o.sayName=function(){
+					return this.name;
+				}
+				return o;
+			}
+			
+			//2.1寄生构造函数模式的应用
+			function SpecialArray(){
+				var arr = new Array();
+				//将new SpecialArray()时传入的参数  保存到arr数组中
+				arr.push.apply(arr,arguments);
+				
+				arr.myJoin = function(){
+					return this.join("-");//使用arr.mySplit()调用者当然是arr
+				}
+				return arr;
+			}
+			
+			var spArr = new SpecialArray("r","g","b");
+			log(spArr.myJoin());//r-g-b
+			
+			//3.稳妥构造函数模式 创建对象
+			
+			
+			//二.继承
+			//1.原型继承
+			function SuperType(name,age){
+				this.name=name;
+				this.age=age;
+			}
+			SuperType.prototype.sayName=function(){
+				console.log("super中的sayName方法"+this.name);
+			}
+			SuperType.prototype.sayAge=function(){
+				console.log("super中的sayAge方法"+this.age);
+			}
+			
+			function SubType(name,age){
+				this.name=name;
+				this.age=age;
+			}
+			//注意这个继承的位置要写在给子类添加方法之前.  可以尝试移动到之后
+			//实现 继承的本质  是 重写  原型对象!!!!
+			//即 原来存在于SuperType实例对象中的所有方法,现在也存在于 子类的prototype中了
+			SubType.prototype=new SuperType();
+			
+			SubType.prototype.sayName=function(){
+				console.log("sub中的sayName方法"+this.name);
+				console.log(this.name);
+			}
+			
+			
+			var sub1 = new SubType("zcc","11");
+			sub1.sayName();
+			sub1.sayAge();
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script>
+			$(function(){
+				var o =null;
+				var rt = "efwk";
+				//原eval表达式
+				eval('if (typeof ' + rt + ' == "undefined"){' + rt + ' = {};} o = ' + rt + ';');
+				//其实想看eval的结果到底是什么很简单,先在chrome中选中eval中的字符串,看它到底是什么字符串
+				//chrome中复制出来的eval表达式,去除最外面的双引号
+				eval('if (typeof efwk == "undefined"){efwk = {};} o = efwk;');
+				//其实以上就等价于,注意 表达式已经执行过两次了,typeof efwk已经不是"undefined",注释掉前面两个看下面的执行过程吧
+				if (typeof efwk == "undefined"){efwk = {};} o = efwk;
+				debugger;
+			});
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

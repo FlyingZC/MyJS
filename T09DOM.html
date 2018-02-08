@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<div id="d1"></div>
+		<ul id="city">第一个文本节点
+			<li id="bj" name="BeiJing">北京</li>第二个文本节点
+			<li>上海</li>
+			<li>东京</li>
+			<li>首尔</li>只要有空格或换行出现都是一个文本节点
+		</ul>
+
+		<table border="1" cellspacing="" cellpadding="">
+			<thead>
+				<th>Header</th>
+				<th>Header</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Data</td>
+					<td>Data</td>
+				</tr>
+				<tr>
+					<td>Data</td>
+					<td>Data</td>
+				</tr>
+				<tr>
+					<td>Data</td>
+					<td>Data</td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+	<script>
+		//1.nodeName和nodeValue
+		var cityNode = document.getElementById("city");
+		console.log(cityNode.nodeType = Node.ELEMENT_NODE);
+		cityNode.hasChildNodes(); //是否有孩子节点
+		cityNode.childNodes;
+		var firstChildLi = cityNode.childNodes[0];
+		cityNode.childNodes.item(0);
+		cityNode.childNodes.length;
+
+		firstChildLi.parentNode;
+		firstChildLi.nextSibling;
+		firstChildLi.previousSibling;
+		//将domList转换为Array.在ie8及其之前无效
+		Array.prototype.slice.call(cityNode.childNodes, 0);
+
+		//创建元素节点
+		var newNode = document.createElement("li");
+		//创建属性节点
+		var attrNode = newNode.setAttribute("name", "NanJing");
+		//创建文本节点
+		var txtNode = document.createTextNode("南京");
+		newNode.appendChild(txtNode);
+		//添加到孩子节点末尾
+		cityNode.appendChild(newNode);
+		//添加到孩子节点中某个节点之前
+		cityNode.insertBefore(newNode, firstChildLi);
+		//替换某个子节点
+		//cityNode.replaceNode(new,old);
+		//移除某个子节点
+		//cityNode.removeNode(oldNode);
+
+		//cloneNode()克隆某个节点,true表示 深复制 复制节点和子树
+		var cloneCity = cityNode.cloneNode(true);
+		//取得会<body>的引用
+		document.body.appendChild(cloneCity);
+		//获取对<html>的引用
+		var htmlDoc = document.documentElement;
+
+		document.URL; //"http://127.0.0.1:8020/MyJS/T09DOM.html"
+		document.domain; //"127.0.0.1"
+		document.referrer; //连接到当前页面的 那个页面的 url
+
+		document.forms;
+		//document.forms[0].submit();//提交表单
+		//document.forms["form2"];
+		document.images;
+
+		cityNode.setAttribute("name", "city");
+		cityNode.getAttribute("name");
+
+		//操作表格
+		var table=document.createElement("table");
+		table.border=1;
+		table.width="100%";
+		
+		//创建tbody
+		var tbody=document.createElement("tbody");
+		table.appendChild(tbody);
+		
+		//创建一行
+		tbody.insertRow(0);
+		tbody.rows[0].insertCell(0);
+		tbody.rows[0].cells[0].appendChild(document.createTextNode("cell-1-1"));
+		
+		tbody.rows[0].insertCell(1);
+		tbody.rows[0].cells[1].appendChild(document.createTextNode("cell-1-2"));
+		
+		document.body.appendChild(table);
+		
+		//Selectors API
+		//querySelector():接收一个css选择符,返回匹配的第一个元素.找不到返回null,传入不支持的选择符抛异常.
+		//使用document.调用则在整个dom查询,使用element.调用则在后代元素内查询
+		//querySelectorAll():返回所有匹配的元素列表NodeList
+		var doc=document;
+		doc.querySelector("body");
+		doc.querySelector("#myDiv");
+		doc.querySelector(".selected");
+	</script>
+
+</html>

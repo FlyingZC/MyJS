@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-1.11.3.js"></script>
+		<script>
+			$(document).ready(function() {
+				//body对象  
+				var $body = $("body");
+				//body高度  
+				var bh = $body.height();
+
+				//加载窗体滑动事件  
+				$(window).scroll(function() {
+					//窗体高度  
+					var wh = $(window).height();
+					//滚动条滚动长度  
+					var sh = $(window).scrollTop();
+					if(wh + sh > bh) {
+						loaddata(sh);
+					}
+
+				})
+			});
+
+			function loaddata(sh) {
+				var html = "<div>test"+sh+"</div>";
+				$('body').append(html);
+			};
+		</script>
+	</head>
+
+	<body>
+		<div style="height:1000px;">
+
+		</div>
+
+	</body>
+
+</html>

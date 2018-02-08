@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>监听器</title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/angular.min.js"></script>
+		<script>
+			//获取ng-app
+			var app=angular.module('myApp',[]);
+			//控制器ng-controller
+			//$element代表ng-controller所在的元素
+			app.controller("watchCtrl",function($scope,$element){
+				var d=$element.children().eq(0);
+				console.log(d);
+				//在$scope范围内的变量w
+				$scope.w=d.width();
+				$scope.h=d.height();
+				//监听器,监听作用域中某个属性值的变化.
+				//监听w属性变化时更改width
+				$scope.$watch("w",function(to,from){//w为$scope中的属性
+					d.width(to);
+				});
+				$scope.$watch("h",function(to,from){
+					d.height(to);
+				});
+				//4.自定义函数
+				$scope.changeSize=function(){
+					$scope.w=parseInt($scope.w)+10;
+					$scope.h=parseInt($scope.h)+10;
+				};
+			});
+		</script>
+	</head>
+	<body ng-app="myApp">
+		<div ng-controller="watchCtrl">
+			<!--4.ng-click时触发自定义的changeSize()函数-->
+			<div style="height: 100px;width: 50px;border: 1px solid black;background-color: red;" ng-click="changeSize()">
+			<div>{{w}}---{{h}}</div>
+			<div>
+				<!--该model对应$scope中的w属性-->
+				<input type="text" ng-model="w" />
+				<input type="text" ng-model="h" />
+			</div>	
+		</div>
+			
+		</div>
+	</body>
+</html>

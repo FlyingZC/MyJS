@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			引用类型,包括Object,Array,Date,RegExp,Function等,apply(),call() 
+			一.Object类型;二.Array类型;三.Date类型;六.Function类型;apply()和call();
+		</title>
+		<script>
+			//将log挂载到window对象下
+			window.log = console.log;
+			//一.Object类型
+			//1.创建
+			//(1)
+			var person = new Object();
+			person.name = "Nick";
+			//(2)对象字面量表示法
+			var per = {
+				name: "Nicky",
+				age: 29,
+				"hobby": "swim",
+				5: "这个属性名5会自动被转换为字符串5"
+			};
+			console.log(per[5]); //在调用该属性时使用[]
+			//
+			var people = {};
+			//2.调用函数
+			//定义函数
+			function displayInfo(args) {
+				var output = "";
+				if(typeof(args.name) == "string") {
+					output += "姓名:" + args.name;
+				}
+				if(typeof args.age == "number") {
+					output += "年龄:" + args.age;
+				}
+				console.log(output);
+			}
+
+			//2.调用
+			//(1)使用字面量方式调用
+			displayInfo({
+				name: "zxxc",
+				age: 29
+			});
+			//(2)
+			var can = new Object();
+			can.name = "zf";
+			can.age = 11;
+			displayInfo(can);
+			
+			//3.访问属性
+			//(1)
+			console.log(can.age);
+			//(2)
+			console.log(can["name"]);
+
+			//二.Array类型
+			//1.创建Array
+			//(1)
+			console.log("----Array----");
+			var colors = new Array();
+			console.log(colors.length); //0
+			var colors2 = new Array(20);
+			console.log(colors2.length); //20
+			var colors3 = new Array("red", "blue", 1, 2);
+			//(2)省略new
+			var color4 = Array("r", "g");
+			//(3)字面量方式
+			var c1 = ["r", 1, 2];
+			var c2 = []; //空数组
+			//2.读取Array
+			console.log(c1[0]);
+			c1[1] = "hah";
+			//可以跳到不存在的下标赋值,之前未赋值的下标存undefined
+			c1[4] = "woq";
+			for(var i = 0; i < c1.length; i++) {
+				console.log(c1[i]);
+			}
+			//3.length属性,可自行修改.假设增长,则未赋值的下标处值为undefined.若减小,则数组后面值会被移除
+			var c3 = ["r", "g", "b"];
+			c3.length = 2;
+			console.log(c3[2]); //undefined
+			//判断是否是Array类型的两种方式
+			console.log(c3 instanceof Array);
+			console.log(Array.isArray(c3));
+
+			//4.toString():将用逗号分隔数组,转成字符串
+			var c4 = ["r", "g", "b"];
+			console.log(c4.toString()); //r,g,b
+			console.log(c4.valueOf()); //["r", "g", "b"]
+
+			//5.join("符号"):以指定分隔符 将数组转为字符串
+			var c5 = ["r", "g", "b"];
+			console.log(c5.join("|"));//r|g|b
+			//6.push(),pop()实现栈操作
+			var c6 = new Array();
+			//栈方法
+			var count = c6.push("r", "g"); //入栈两个元素,返回入栈个数
+			console.log(count); //2
+			console.log(c6.pop()); //g  出栈,返回出栈的元素(最后一个元素)
+			
+			//队列方法
+			console.log(c6.shift()); //r 移除并获取第一项,数组长度减一,队列操作
+			console.log("--unshift--");
+			console.log(c6.unshift("a", "b")); //2 unshift在数组头放入(添加),返回添加的元素个数
+			console.log(c6);
+			
+			c6.reverse();//反转
+			//7.sort():默认调用每一项的toString(),然后比较每一项的字符串的大小
+			var c7 = [1, 45, 2, 343, 534, 53, 53];
+			//自定义排序规则
+			function compare(v1, v2) {
+				if(v1 < v2) {
+					return -1;
+				} else if(v1 > v2) {
+					return 1;
+				} else {
+					return 0;
+				}
+			}
+			c7.sort(compare);
+			console.log(c7);
+			
+			//8.concat(),数组和string均有该方法!!!不修改原数组,而是返回新数组!!!
+			var c8 = ["r", "g", "b"];
+			var c9 = c8.concat("yellow", ["black", "brown"]); //可concat多个值
+			console.log(c9);
+
+			//9.slice(start,end):返回start到end-1的数组内容.含头不含尾,不影响原数组.string也有该方法
+			var d1 = ["r", "g", "b", "h", "w", "f"];
+			var d2 = d1.slice(1);
+			console.log(d2); //["g", "b", "h", "w", "f"]
+			var d3 = d1.slice(1, 3); //["g", "b"]
+			console.log(d3);
+
+			//10.splice(2,1,"red","green"):从下标2处删除一个元素(包括下标2),再插入red和green两个元素!!!
+			//splice方法返回值为删除的数组元素,若删除0个,返回[]
+			var d4 = ["r", "g", "b", "h", "w", "f"];
+			var removed = d4.splice(0, 1); //删除原数组下标0项,返回删除的元素
+			console.log(removed);
+			console.log(d4);
+			var d5 = ["r", "g", "b", "h", "w", "f"];
+			d4.splice(d5.splice(2, 1, "n1", "n2")); //["r", "g", "n1", "n2", "h", "w", "f"]
+			console.log(d5);
+			//11.indexOf(),lastIndexOf():返回index
+
+			//12.迭代
+			var nums = [1, 2, 3, 4, 5, 6, 7, 8, 5, 4, 3, 2, 1];
+			//every(function(每一项,下标,数组){}):每一项都返回true,则结果为true
+			var everyResult = nums.every(function(item, index, nums) {
+				return item > 0;
+			});
+			console.log(everyResult); //true
+			//some():对数组中的每一项比较,若随便有一项返回true,返回true
+			var someResult = nums.some(function(item, index, nums) {
+				return item > 2;
+			});
+			console.log(someResult); //true
+			//filter():对数组中的每一项比较,返回true的项组成的数组
+			var filterResult = nums.filter(function(item, index, nums) {
+				return item > 4;
+			});
+			console.log(filterResult); //[5, 6, 7, 8, 5]
+			//map():返回对数组中每一项进行相关操作后的数组
+			var mapResult = nums.map(function(item, index, nums) {
+				return item * 2;
+			});
+			console.log(mapResult); //[2, 4, 6, 8, 10, 12, 14, 16, 10, 8, 6, 4, 2]
+			//forEach():没有返回值,相当于for循环
+			nums.forEach(function(item, index, nums) {
+
+			});
+			//reduce():迭代数组的所有项,然后构建一个最终返回的值.
+			//reduce()从数组的第一项开始遍历到最后.reduceRight()从最后一项开始向前遍历
+			var nums2 = [1, 2, 3, 4, 5];
+			//前一个值,当前值,当前项的索引,数组对象.该函数返回的任何值都会作为第一个参数自动传递给下一项
+			var reduceResult = nums2.reduce(function(prev, cur, index, array) {
+				return prev + cur;
+			});
+			console.log(reduceResult);
+			
+			//三.Date类型p102
+			console.log("------Date类型------");
+			var now = new Date();
+			var now2 = Date.now();
+			console.log(now);
+			//获取毫秒数的简略写法
+			console.log(+new Date()); //1502722215667
+			log(new Date().getTime());
+			//构造方法,月份从0-11
+			log(new Date(2012, 1, 12, 12, 49, 56)); //Sun Feb 12 2012 12:49:56 GMT+0800 (中国标准时间)
+			log(new Date(2013, 11, 11));
+			//接收 毫秒数
+			log(new Date(new Date().getTime()));
+			//四.RegExp类型
+
+			//五.Math
+			Math.random(); //返回0-1之间的随机数,不包括0和1
+
+			//六.Function类型
+			//1.函数声明
+			//(2)
+			function sum(num1, num2) {
+				return num1 + num2;
+			}
+			//(2)
+			var sum1 = function(num1, num2) {
+				return num1 + num2;
+			}
+			//(3)
+			var sum2 = new Function("num1", "num2", "return num1+num2");
+			var sum3 = sum2;
+
+			//2.apply()
+			//apply()和call()使用大致相同.  具体要调用的函数.apply(指定的作用域,[参数数组]); sum.apply(this,[num1,num2]);
+			//具体要调用的函数.call(指定的作用域,多个参数); sum.call(this,num1,num2);
+			//在B中调用  A.apply(this,arguments);则会调用A
+			function Su(num1, num2) {
+				return num1 + num2;
+			}
+
+			function callSu1(num1, num2) {
+				return Su.apply(this, arguments);
+			}
+
+			function callSu2(num1, num2) {
+				return Su.apply(this, [num1, num2]);
+			}
+			console.log(callSu1(10, 20)); //30
+			console.log(callSu2(10, 20)); //30
+			//call()
+			function callSu3(num1, num2) {
+				return Su.call(this, num1, num2);
+			}
+			console.log(callSu3(19, 20));
+
+			//!!!!!!!!1call()和apply()作用,扩充函数赖以运行的作用域
+			window.color = "red";
+			var o = { color: "blue" };
+
+			function sayColor() {
+				console.log(this.color);
+			}
+			sayColor(); //red 默认sayColor()是作为全局函数定义的
+			//使用方法名调用,相当于var sayColor=function(){};
+			sayColor.call(this); //red 显式的在全局作用域中调用函数
+			sayColor.call(window); //red 显式的在全局作用域中调用函数
+			sayColor.call(o); //blue 此时函数体内的this对象指向了o
+
+			//基本包装类型
+			var e1 = "some txt";
+			var e2 = e1.substring(2);
+			//相当于
+			var e3 = new String("some txt");
+			var e4 = e3.substring(2);
+			e3 = null;
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

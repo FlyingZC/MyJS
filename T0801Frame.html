@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			window.frames[0];
+			window.frames["topFrame"];
+			top.frames[0];
+		</script>
+	</head>
+	<frameset rows="160,*">
+		<frame src="T01.html" name="topFrame">
+		<frameset cols="50%,50%">
+			<frame src="T01.html" name="leftFrame"/>
+			<frame src="T04.html" name="rightFrame"/>
+		</frameset>
+	</frameset>
+</html>

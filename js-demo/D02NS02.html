@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>名称空间</title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script>
+			$(function(){
+				//若 对象存在,则就是原对象不覆盖,否则创建新对象
+				//var product = {"name":"zc"};
+				var product = product || {};
+				
+				product.namespace = function(){
+					//传入的arguments是类似于"efwk.common"这样的字符串
+					//该字符串最终会创建成类似于 efwk对象,中包含common属性,该属性又是一个对象....
+					var arg = arguments[0];
+					//将 包名 拆分成 ["efwk","common"]数组
+					var segment = arg.split(".");
+					//第 0 个字符串,如 "efwk"
+					var rt = segment[0];
+					//o和rt相同的对象
+					var o = null;
+					//用 第 0个名称字符串( 即"efwk" )创建一个空对象
+					eval('if( typeof '+ rt +' ==="undefined" ){ rt = {} } o = rt ;');
+					//上一行代码结束后创建了一个对象,两个引用rt 和 o 均 指向它.后续递归中修改了o的引用,并不会影响到rt所指向的这个对象
+					for(var i = 1;i<segment.length;i++){
+						//用后续 字符串 递归 创建 属性,如{"common":{"person":{}}}
+						o[segment[i]] = o[segment[i]] || {};
+						o = o[segment[i]];
+					}
+					return o;
+				}
+				
+				product.NS=product.namespace;
+				debugger;
+				product.NS("efwk.common.person.com.zc.util");
+			});
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

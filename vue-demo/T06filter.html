@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/vue.js"></script>
+		<script>
+			$(function(){
+				var app1=new Vue({
+					el:'#app1',
+					data:{
+						message:"h哈哈哈"
+					},
+					filters:{
+						myFilter1:function(value){
+							//1.2定义过滤器
+							if(!value){
+								return "";
+							}
+							value=value.toString();
+							return value.charAt(0).toUpperCase();
+						},
+						myFilter2:function(value,arg2,arg3){
+							if(!value){
+								return "";
+							}
+							value=value.toString();
+							return value.concat("呵呵呵").concat(arg2).concat(arg3);
+						}
+					},
+					methods:{
+						
+					}
+				});
+			});
+		</script>
+	</head>
+	<body>
+		过滤器用在插值 和 v-bind表达式
+		<div id="app1">
+			<!--1.1使用过滤器-->
+			<div>{{message|myFilter1|myFilter2("二","三")}}</div>	
+		</div>
+	</body>
+</html>

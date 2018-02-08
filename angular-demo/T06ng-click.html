@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/angular.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css" />
+	</head>
+		<div ng-controller="bookCtrl">
+	<body ng-app="myApp">
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="b in books">
+					<span class="glyphicon glyphicon-bookmark"></span>
+					<span>{{b.title}}</span>
+					<!--1.ng-click-->
+					<span data-id="{{b.id}}" ng-click="hideFunc($event.target)" style="cursor: pointer;" class="pull-right glyphicon glyphicon-remove"></span>
+				</li>
+			</ul>
+		</div>
+		<script>
+			var app=angular.module("myApp",[]);
+			app.controller('bookCtrl',function($scope,$http){
+				$http.get("books.json").then(function(response){
+					$scope.books=response.data;
+					console.log($scope.books);
+				}).catch(function(response){
+					
+				});
+				
+				
+				$scope.hideFunc=function(t){
+					//获取当前要删除的图书的编号
+					console.log($(t).attr("data-id"));
+					$(t).parent().hide(1000);
+				}
+			});
+		</script>
+	</body>
+</html>

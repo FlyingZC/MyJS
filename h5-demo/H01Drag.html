@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script>
+			$(function(){
+				var source=$("#dragme");
+				var dest=$("#text");
+				source.addEventListener("dragstart",function(e){
+					var dt=e.dataTransfer;
+					
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="drageme" draggable="true" style="width: 200px;border:1px solid black">
+			请拖拽
+		</div>
+		<div id="text" style="width: 200px; height: 200px;border: 1px solid black;">
+			
+		</div>
+	</body>
+</html>

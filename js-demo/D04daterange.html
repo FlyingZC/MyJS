@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-1.11.3.js"></script>
+		<script>
+			$(function() {
+				//月份(0-11),天数(1-31),小时(0-23)
+				console.log(new Date(Date.UTC(2005,4,5,17,55,55)));
+				setWeek();
+				getTS();
+			});
+
+			var setWeek = function() {
+				//设置日期，当前日期的前七天
+				var myDate = new Date(); //获取今天日期
+				myDate.setDate(myDate.getDate() - 7);
+				var dateArray = [];
+				var dateTemp;
+				var flag = 1;
+				for(var i = 0; i < 7; i++) {
+					dateTemp = (myDate.getMonth() + 1) + "-" + myDate.getDate();
+					dateArray.push(dateTemp);
+					myDate.setDate(myDate.getDate() + flag);
+				}
+				console.log(myDate);	
+			}
+			
+			/**
+			 * 获取时间戳
+			 */
+			var getTS=function(){
+				//方式1:获取的时间戳是把毫秒改成000显示
+				console.log(Date.parse(new Date()));//1511338994000
+				//方式2,3:包含毫秒数
+				console.log(new Date().valueOf());//1511338994414
+				console.log(new Date().getTime());//1511338994414
+			}
+			
+			/**
+			 * @param {Object} endDate 结束日期
+			 * @param {Object} agoNum 几个月前
+			 */
+			var monthAgo = function(agoNum,endDate){
+				if(endDate==='undefined'){
+					endDate = new Date();
+				}
+				var endMonthFirstDay=endDate;
+				endMonthFirstDay.setData(0);
+				
+				var startMonthFirstDay = endMonthFirstDay;
+				startMonthFirstDay.setMonth(endMonthFirstDay.getMonth()-agoNum);
+				//判断是否溢出到下个月了
+				
+				startMonthFirstDay.getm
+			}
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			var a=function(){
+				//1.私有函数
+				function someSetup(){
+					var setup='done';
+				}
+				//1.私有函数
+				function actualWork(){
+					//alert('work-work');
+					console.log('work-work');
+				}
+				someSetup();
+				return actualWork;
+			}();//2.自执行函数
+			//3.第一次调用!!!是在自执行时候调用（不是下面a()时候调用）,会调用someSetup(),并 返回actualWork函数的引用
+			//由于这里是var a=...,所以自执行返回的值会重新赋值给a
+			
+			//第二次调用.此时相当于var a=    actualWork函数的引用
+			a();
+			
+			//----------------------
+			//可跳过
+			function f1(){
+				var a=1;
+				f2();
+			}
+			
+			function f2(){
+				return a;
+			}
+			
+			console.log(f1());//undefined
+			
+			//----------------------
+			//闭包
+			//1.
+			function f(){
+				var b="b";
+				return function(){
+					return b;
+				}
+			}
+			//2.n为全局变量,但是它处于f2()内,所以可以访问b
+			function f2(){
+				var b="b";
+				n=function(){
+					return b;
+				}
+			}
+			console.log(n());//b
+			
+			//----------------
+			//getter,setter
+			var getValue,setValue;
+			(function(){
+				var secret=0;
+				getValue=function(){
+					return secret;
+				};
+				setValue=function(v){
+					secret=v;
+				};
+			})();
+			setValue(12);
+			console.log(getValue());//12
+			
+			//-------
+			//利用闭包 创建 迭代器
+			//传入一个数组x
+			function setup(x){
+				var i=0;
+				return function(){
+					return x[i++];//返回下一项
+				}
+			}
+			var next=setup(['a','b','c']);
+			console.log(next());//a
+			console.log(next());//b
+			console.log(next());//c
+			
+			//alert(a)值为2.
+			var a=1;
+			function ff(){
+				var a=2;
+				function n(){
+					alert(a);
+				}
+				//关键看谁调用的n(),此时只能是ff调用的
+				n();
+			}
+			ff();
+			
+			//eval()
+			var f1=alert;
+			eval('f1("Boo!")');
+			
+			var e2;
+			var f2=alert;
+			//第一个括号,将f2复制给e2,为alert.再加第二个括号alert()
+			eval('e2=f2')('Boo2!');
+			
+			//
+			(function(){
+				return alert;//返回alert的引用
+			})()('Boo3!');
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

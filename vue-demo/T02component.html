@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/vue.js"></script>
+		<script>
+			//2.1.2创建组件
+			//组件名,模板
+			$(function() {
+				Vue.component('todo-item', {
+					template: '<li>这是一个待办项</li>'
+				})
+				var app1 = new Vue({
+					el: '#app-1',
+					data: {
+
+					}
+				});
+
+				//全局组件，接收参数
+				Vue.component('my-item', {
+					//接收请求参数person
+					props: ['person'],
+					//在模板中使用
+					template: '<li>{{person.name+person.age}}</li>'
+				});
+
+				Vue.component('child', {
+					// 声明 props
+					props: ['message'],
+					// 就像 data 一样，prop 可以用在模板内
+					// 同样也可以在 vm 实例中像 “this.message” 这样使用
+					template: '<span>{{ message }}</span>'
+				})
+				//接收参数为驼峰命名法,对应html中为-	
+				Vue.component('child2', {
+					// camelCase in JavaScript
+					props: ['myMessage'],
+					template: '<span>{{ myMessage }}</span>'
+				})
+
+				//动态传递参数到component中
+
+				var app2 = new Vue({
+					el: '#app-2',
+					data: {
+						//2.2.1定义persons属性
+						persons: [
+							{ name: 'zx', age: 121, id: 1 },
+							{ name: 'za', age: 114, id: 2 },
+							{ name: 'zb', age: 115, id: 3 },
+							{ name: 'zc', age: 116, id: 4 },
+							{ name: 'zd', age: 117, id: 5 }
+						],
+						parentMsg:null
+					}
+				});
+
+				var myComponent = {
+					template: '<div>我的自定义局部组件</div>'
+				}
+				var app3 = new Vue({
+					el: '#app3',
+					data: {
+
+					},
+					components: {
+						'my-component': myComponent
+					}
+				});
+			});
+		</script>
+
+	</head>
+
+	<body>
+		2.组件系统:使用小型、自包含和通常可复用的组件构建大型应用。<br/> 2.1创建Vue组件,该组件本质是拥有预定义选项的一个Vue实例
+		<br/> 使用自定义的组件模板
+		<br/> 该自定义模板必须在某个app里.且component在app外,$(function())内
+		<div id="app-1">
+			<todo-item></todo-item>
+		</div>
+
+		2.2定义可以传参数进去的组件
+		<div id="app-2">
+			<ol>
+				遍历app2中的persons属性,其中的每一个通过v-bind:person
+				<!--2.2.2遍历persons属性,传入my-item标签-->
+				<my-item v-for="per in persons" v-bind:person="per"></my-item>
+			</ol>
+
+			<child message="hello!"></child>
+
+			<child2 my-message="hello!"></child2>
+			
+			<br/>
+			动态传递参数到component中
+			方式1,在data中声明parentMsg变量,且绑定到了input上.当input中该变量改变时,传入component中的元素值也发生变化
+			<div>
+				<input v-model="parentMsg">
+				<br>
+				<child2 v-bind:my-message="parentMsg"></child2>
+			</div>
+			方式2
+			<child2 :my-message="parentMsg"></child2>
+		</div>
+
+		2.3局部组件
+		<div id="app3">
+			<my-component></my-component>
+		</div>
+		
+		<br/>
+		prop是单向绑定的,当父组件的属性变化时,将传给子组件.但不会反过来
+	</body>
+
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>part7 函数表达式,闭包</title>
+		<script>
+			//一.函数声明的两种方式
+			//1.函数声明 ,会出现[函数声明提升],即在执行代码之前会先读取函数声明
+			sayHi();
+
+			function sayHi() {
+				console.log("hi");
+			}
+			//2.函数表达式(不会出现函数声明提升)
+			//sayHa();//此时sayHa还未声明
+			var sayHa = function() {
+				console.log("ha");
+			}
+			//递归.将有名函数f赋给factorial
+			var factorial = (function f(num) {
+				if(num < 1) {
+					return 1;
+				} else {
+					return num * f(num - 1);
+				}
+			});
+			console.log(factorial(10));
+
+			//函数表达式+命名函数
+			var factor = (function f(num) {
+				if(num <= 1) {
+					return 1;
+				} else {
+					return num * f(num - 1);
+				}
+			});
+			
+			
+			//重写自身的 函数
+			function funZi(){
+				alert("funZi--A");
+				funZi=function(){
+					alert("funZi--B");
+				}
+			}
+			funZi();//A 第一次调用，执行外层funZi函数，且funZi在内部改变
+			funZi();//B 第二次调用
+			funZi();//B 第三次调用
+
+			//二.闭包
+			//有权访问  另一个函数作用域中的变量  的函数
+			//1.
+			function createComparisonFunction(propertyName) {
+				return function(object1, object2) {
+					var value1 = object1[propertyName];
+					var value2 = object2[propertyName];
+					if(value1 < value2) {
+						return -1;
+					} else if(value1 > value2) {
+						return 1;
+					} else {
+						return 0;
+					}
+				};
+			}
+
+			//在createComparisonFunction("name")函数执行完毕后,
+			//其活动对象不会被销毁,因为匿名函数的作用域链仍然在引用这个活动对象
+			//直到匿名函数也被销毁后,createComparisonFunction("name")的活动对象才会被销毁
+			var compareNames = createComparisonFunction("name");
+			var result = compareNames({ name: 'nick' }, { name: 'grey' });
+			//解除对匿名函数的引用(以便释放内存)
+			compareNames = null;
+
+			//2.
+			//!!作用域链的这种配置机制,导致闭包只能取得包含函数中任何变量的最后一个值
+			function createFun() {
+				var result = new Array();
+				for(var i = 0; i < 10; i++) {
+					//这里每次只是将闭包(即这个内部函数) 放入数组(又没执行).在第91行执行时,i值早已经是10了
+					result[i] = function() {
+						return i;
+					};
+				}
+				return result;
+			}
+			//createFun()返回result,result是一个function数组(包含多个function)
+			var funArr = createFun();
+			for(var i = 0; i < funArr.length; i++) {
+				var everyFunResult = funArr[i](); //执行每一个function
+				console.log(everyFunResult); //输出10次10
+			}
+			console.log(createFun());
+
+			//以上例子简单一点
+			function createFun2() {
+				for(var i = 0; i < 10; i++) {
+
+				}
+				return function() {
+					return i;
+				}
+			}
+			console.log("--以上例子简单一点--");
+			console.log(createFun2()()); //10
+
+			//2.2!!!创建另一个匿名函数自执行 强制让闭包的行为符合预期
+			function createFunc3() {
+				var result = new Array();
+				for(var i = 0; i < 10; i++) {
+
+					//定义一个匿名函数,并将 立即执行 该匿名函数 的 结果  赋值给数组
+					result[i] = function(num) {
+						return function() {
+							return num;
+						};
+					}(i); //!!!将每次i值 复制给参数num.
+
+				}
+				return result;
+			}
+
+			var createFuncResult3 = createFunc3();
+			for(var i = 0; i < createFuncResult3.length; i++) {
+				var everyResult3 = createFuncResult3[i]();
+				console.log(everyResult3); //输出0-9
+			}
+			
+			//------------
+			function createFunc4() {
+				var result = new Array();
+				for(var i = 0; i < 10; i++) {
+
+					//定义一个匿名函数,并将 立即执行 该匿名函数 的 结果  赋值给数组
+					result[i] = function(num) {
+							return num;
+					}(i); //!!!将每次i值 复制给参数num.
+
+				}
+				return result;
+			}
+
+			var createFuncResult4 = createFunc4();
+			for(var i = 0; i < createFuncResult4.length; i++) {
+				var everyResult4 = createFuncResult4[i];
+				console.log(everyResult4); //输出0-9
+			}
+
+
+
+			var name2 = "The Window";　　
+			var object2 = {　　　　
+				name: "My Object",
+				　　　　
+				getNameFunc2: function() {　　　　　　
+					return function() {　　　　　　　　
+						return this.name2;　　　　　　
+					};　　　　
+				}　　
+			};　　
+			console.log(object2.getNameFunc2()());//The Window
+
+			//3.this在闭包中可能会发生变化
+			//使用变量保存需要的this值
+			var name3 = "The window";
+			var Object3 = {
+				name3: "My Object",
+				getNameFunc: function() {
+					//保存this
+					var that = this; //2)走到这里,保存this.后面的return function(){..}直接返回,并未走里面
+					return function() {
+						console.log(that.name3); //My Object
+						return this.name3; //4)此时this为window
+					};
+				}
+			};
+
+			console.log("--3.this--");
+			//console.log(Object3.getNameFunc()());//The window
+			//分成两步,debug走一下比较清晰
+			//1).该行,使用Object3调用,this当然是Object3
+			var oo = Object3.getNameFunc();
+			//3).该行,相当于使用window调用.
+			oo();
+
+			console.log("--4.模仿块级作用域--");
+			//4.模仿块级作用域
+			for(var j = 0; j < 10; j++) {
+
+			}
+			console.log(j); //10
+
+			function outputNumbers() {
+				//自执行里相当于 私有作用域,在匿名函数中定义的任何变量,都会在执行结束后被销毁
+				(function() {
+					for(var m = 0; m < 10; m++) {
+
+					}
+				})();
+				//console.log(m);//m is not defined
+			}
+
+			//闭包
+			function f1() {
+				var n = 999;
+
+				function f2() {
+					console.log(n);
+				}
+				return f2;
+			}
+			var result = f1();
+			//f2为闭包.闭包就是能够读取其他函数内部变量的函数
+			result(); //999
+			//闭包能让外部fn变量的值始终保持在内存中,直到内部函数执行完毕
+			function fn1() {
+				var n = 999;
+				addVar = function() {
+					n += 1;
+				}
+
+				function fn2() {
+					console.log(n);
+				} //return内部function
+				return fn2;
+			}
+			//正常var r=fn1();fn1执行完后,其中局部变量n应该清除.
+			//但return fn2将fn2赋值给全局变量r.fn2依赖于fn1,不会被回收
+			var r = fn1();
+			r(); //999
+			//addVar也是全局的
+			addVar();
+			r(); //1000
+
+			//5.实现  私有变量
+			console.log('--5.实现  私有变量--');
+			//方式1:在构造函数中定义特权方法.
+			//缺点:必须使用构造函数 模式,而构造函数会为每个实例创建同样一组新方法(浪费)
+			function MyObject5() {
+				//私有变量和 私有函数
+				var privateVariable = 10;
+				//没有挂载到this下,在外部访问不了该函数
+				function privateFunction() {
+					return false;
+				}
+				//特权方法:有权 访问 私有变量 和 私有函数 的 共有 方法
+				this.publicMethod = function() {
+					//通过该方法修改private变量
+					privateVariable++;
+					//通过该方法调用private方法
+					return privateFunction();
+				};
+			}
+
+			//5.2实现getter,setter方法
+			function Person5(name) {
+				this.getName = function() {
+					return name;
+				}
+				this.setName = function(value) {
+					name = value;
+				}
+			}
+			//缺点是每个对象实例 都需要重新创建getName和setName方法
+			var person5 = new Person5("zccc");
+			console.log(person5.getName());
+			person5.setName("haha");
+			console.log(person5.getName());
+
+			//5.3静态私有变量
+			console.log("--5.3静态私有变量--");
+			//方式二:使用  静态私有变量 实现 特权方法
+			//缺点:变量 和 原型方法 都是 所有实例共享的 修改会影响所有实例
+			(function() {
+				//在私有作用域中 定义 私有变量 或 函数,可创建特权(get,set等public)方法
+				var privateVariable = 10;
+				var name = "";
+
+				function privateFunction() {
+					return false;
+				}
+				//构造函数  全局函数,可在之外访问
+				MyObject53 = function(nameValue) {
+					name = nameValue;
+				};
+				//共有方法
+				MyObject53.prototype.publicMethod = function() {
+					privateVariable++;
+					return privateFunction();
+				};
+
+				MyObject53.prototype.getName = function() {
+					return name;
+				}
+				MyObject53.prototype.setName = function(value) {
+					name = value;
+				}
+			})();
+
+			var obj53 = new MyObject53("zc");
+			var obj532 = new MyObject53("zd");
+			console.log(obj53.getName()); //zd
+			obj53.setName("zxx");
+			console.log(obj532.getName()); //zxx
+
+			//6.模块模式
+			var singleton = function() {
+				//私有变量和私有函数
+				var privateVariable = 10;
+
+				function privateMethod() {
+					return false;
+				}
+				//!!!public方法和属性
+				return {
+					publicProperty: true,
+					publicMethod: function() {
+						privateVariable++;
+						return privateMethod();
+					}
+				};
+			}
+
+			console.log(singleton());
+
+			//增强的模块模式
+			//适用于单例必须是某种类型的实例.
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

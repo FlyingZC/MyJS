@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/jquery-2.2.3.min.js"></script>
+		<script>
+			$(function(){
+				var jsonStr={"name":"zxx","age":11};
+				console.log(jsonStr.name);
+				var rt="ef",o;
+				eval('if (typeof ' + rt + ' == "undefined"){' + rt + ' = {};} o = ' + rt + ';');
+				console.log(o);
+				console.log("-----");
+				var code1='"a"+2';
+				console.log(eval(code1));//a2
+				
+				var code2='{a:2}';
+				console.log(eval(code2));//2
+				console.log(eval('('+code2+')'));//输出对象Object{a:2}
+				debugger;
+				a(rt);
+				
+			});
+			
+			function a(rt){
+				if(typeof rt=="undefined"){
+					rt={};
+				}
+				o=rt;
+			}
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

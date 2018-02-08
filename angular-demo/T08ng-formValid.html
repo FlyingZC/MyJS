@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/angular-1.2.5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css" />
+		<script>
+			function MyController($scope,$timeout){
+				var updateClock=function(){
+					$scope.clock=new Date();
+					$timeout(function(){
+						updateClock();
+					},1000);
+				};
+				updateClock();
+			}
+			
+		</script>
+	</head>
+	<body>
+		<form name="form" novalidate>
+			<input type="text" required ng-minlength="5" ng-maxlength="20"/>
+			<input type="text" ng-pattern="[a-zA-Z]" />
+			<input type="email" name="email" ng-model="user.email" />
+			<input type="number" name="age" ng-model="user.age" />
+			<input type="url" name="homepage" ng-model="user.facebook_url" />
+			<label name="email">Your email</label>
+			<input type="email" name="email" ng-model="email" placeholder="Email Address" />
+		</form>
+	</body>
+</html>

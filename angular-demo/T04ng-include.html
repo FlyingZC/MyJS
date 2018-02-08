@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/angular.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css" />
+		<script>
+			
+		</script>
+	</head>
+	<body ng-app="myApp">
+		<!--使用ng-include引入其他页面，不要引入脚本。相当于使用jquery中的load加载-->
+		<div ng-include="'header.html'"></div>
+		<div ng-include="'footer.html'"></div>
+		<section></section>
+		<div ng-init="url='about.html'">
+			<ul class="nav nav-pills">
+				<li class="active"><a ng-click="url='about.html'" data-toggle="tab">about</a></li>
+				<li><a ng-click="url='email.html'" data-toggle="tab">Email</a></li>
+				<li><a ng-click="url='profile.html'" data-toggle="tab">profile</a></li>
+			</ul>			
+		</div>
+		<div ng-include="url" class="focus"></div>
+		
+		
+		
+		<!--二.加载json-->
+		<div ng-controller="menuCtrl">
+			{{menus}}
+			<ul class="nav nav-pills">
+				<li ng-repeat="m in menus">
+					<!--html5中使用data-某某自定义属性.当前触发该事件的目标对象$event.target-->
+					<a data-url="{{m.url}}" ng-click="changeLink($event.target)">{{m.title}}</a>
+				</li>
+			</ul>			
+		
+		</div>
+		<div ng-include="url2" class="focus"></div>
+		<script>
+			var app=angular.module("myApp",[]);
+			app.controller('menuCtrl',function($scope,$http,$element){
+				//加载menu.json文件
+				//angular.js1.6中使用then替代success,catch替代error
+				$http.get("menu.json").then(function(result){
+					console.log("success");
+					//加载成功的json数据存入$scope中的menus变量中
+					$scope.menus=result.data;
+					$scope.url2=menus[0].url;
+				}).catch(function(result){
+					console.log("error");
+				});
+				
+				$scope.changeLink=function(target){
+					alert($(target).html());
+					$scope.url2=$(target).attr("data-url");
+				}
+			});
+		</script>
+		
+	</body>
+</html>

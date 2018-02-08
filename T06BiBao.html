@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>详细见T07Fun</title>
+		<script>
+		//一.
+			function f1(){
+				var a1="a";
+				function f2(){
+					var a2="b";
+					console.log(a1+a2);
+				}
+				//返回 执行f2(),注意与f2的区别.
+				return f2();
+			}
+			f1();//ab  因为return f2()相当于直接执行内部函数了
+			
+		//闭包就是能够读取其他函数内部变量的函数。利用闭包可以突破作用域链
+		//一个函数 在 其 父函数 调用 结束 之后 仍然 能 留住 父级作用域的链接
+		//1.可以读取函数内部的变量,2.就是让这些变量的值始终保持在内存中
+
+		//二.只是将上面的内部有名函数 替换 为 匿名函数 而已
+			//返回函数的 函数(内部函数的一种特殊形式和用法)
+			//作用:!!!(1)可在全局域访问局部变量(2)定义一个函数,却可以执行两个逻辑代码块
+			//原理:内部函数的作用域链 中 包含 外部函数的 作用域
+			function fn(){
+				var a="a";
+				return function(){
+					return a;
+				}
+			}
+			console.log(fn());//此时输出function(){return a;},即return 后面的内容被作为字符串返回
+			//下面这句相当于var fun=function(){return a;}
+			var fun=fn();//!!!作用.可以将局部变量a在全局访问
+			console.log(fun());//调用
+			//以上两句合并写成
+			console.log(fn()());
+			
+		//三.无新意
+			console.log("--------");
+			var v1="a";
+			function m1(){
+				var v2="b";
+				console.log(v1);
+				console.log(v2);
+				function m2(){
+					var v3="c";
+					console.log(v1);
+					console.log(v2);
+					console.log(v3);
+				}
+				return m2();
+			}
+			m1();
+			
+		//四.
+		function f4(){
+			var n4=999;
+			//全局函数,但是由于其位置在f4()函数里,可以访问到f4()函数中的变量n4
+			nAdd4=function(){
+				n4 +=1;
+			}
+			function inner4(){
+				console.log(n4);
+			}
+			return inner4;
+		}
+		//返回function inner4(){...}
+		var result4=f4();
+		//相当于执行function inner4(){...}.
+		//由于function inner4(){...}被赋值给全局变量result4.即inner4函数及其外部函数f4()始终在内存中
+		result4();//999
+		//调用全局函数
+		nAdd4();
+		//再次执行function inner4(){...}
+		result4();//1000
+		
+		//六.无新意
+		function outer(){
+			var outName="I am out";
+			var inner=function(){
+				console.log(outName);
+			}
+			return inner;
+		}
+		var result=outer();
+		result();//I am out
+		
+		
+		
+		//七.!!!!
+		console.log("七!!!!");
+		var name7 = "The Window";
+	　　var object7 = {//注意,此时最外层是个对象.不是函数
+	　　　　name7 : "My Object",
+	　　　　getNameFunc : function(){//这里面才是相当于之前的外部函数
+	　　　　　　return function(){//内部函数,被返回
+	　　　　　　　　return this.name7;
+	　　　　　　};
+	　　　　}
+	　　};
+		//!!!说明this永远指当前作用域,此时为window
+	　　console.log(object7.getNameFunc()());//The Window
+	
+	
+		var name72 = "The Window";
+	　　var object = {
+	　　　　name72 : "My Object",
+	　　　　getNameFunc : function(){
+	　　　　　　var that = this;//保存this
+	　　　　　　return function(){
+	　　　　　　　　return that.name72;
+	　　　　　　};
+	　　　　}
+	　　};
+	　　console.log(object.getNameFunc()());//My Object
+		
+		//对以上 七中的 情况走读解析
+		//3.this在闭包中可能会发生变化  
+		var name3 = "The window";  
+		var Object3 = {  
+			name3: "My Object",  
+			getNameFunc: function() {  
+                 //保存this  
+                 var that = this; //2)走到这里,保存this.后面的return function(){..}直接返回,并未走里面  
+                 return function() {  
+                     console.log(that.name3); //My Object  
+                     return this.name3; //4)此时this为window  
+                 };  
+             }  
+         };  
+         //将 下一行拆分成两行走
+         console.log(Object3.getNameFunc()());//The window    
+         //1).该行,使用Object3调用,this当然是Object3  
+         var oo = Object3.getNameFunc();  
+         //3).该行,相当于使用window调用.  
+         oo();  
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

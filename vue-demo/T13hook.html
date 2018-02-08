@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/vue.js"></script>
+		<script>
+			$(function(){
+				Vue.directive('demo', {
+					//bind(方法名)为只调用一次
+					//binding(第二个参数名为一个对象包含很多属性)vnode为vue上的一个虚拟节点
+				  bind: function (el, binding, vnode) {
+				    var s = JSON.stringify
+				    el.innerHTML =
+				      'name:指令名 :'       + s(binding.name) + '<br>' +
+				      'value: 指令绑定的值:'      + s(binding.value) + '<br>' +
+				      'expression: 绑定值的字符串形式:' + s(binding.expression) + '<br>' +
+				      'arg: 传递给指令的参数:'   + s(binding.arg) + '<br>' +
+				      'modifiers: 一个包含修饰符的对象:'  + s(binding.modifiers) + '<br>' +
+				      'vnode keys: vue虚拟节点:' + Object.keys(vnode).join(', ')
+				  }
+				})
+				new Vue({
+				  el: '#hook-arguments-example',
+				  data: {
+				    message: 'hello!'
+				  }
+				})		
+			});
+		</script>
+	</head>
+	<body>
+		<!--指令名:指令绑定的值name.修饰符a.修饰符b-->
+		<div id="hook-arguments-example" v-demo:hello.a.b="message"></div>
+	</body>
+</html>

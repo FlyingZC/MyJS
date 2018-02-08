@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+		//key只能是字符串
+			var map={
+				key1:'abc',
+				key2:'cde'
+			};
+			//动态赋值
+			map.key3="efg";
+			//若key也是未知的
+			var key='4';
+			map[key]='444';
+			
+			//通过key获取value
+			console.log(map.key3);///属性名已知,为"key3",为string常量
+			console.log(map["4"]);//属性名已知,为"4"
+			console.log(map[key]);//属性名未知,为变量key的值
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

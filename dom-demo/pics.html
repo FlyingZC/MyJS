@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>pics.html</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<script type="text/javascript" src="../js/jquery.js"></script>
+  </head>
+  <script>
+	  $(function(){
+	  	var i=1;
+	  	setInterval(function(){
+	  		var pic="../images/0"+i+".jpg";
+	  		$("img").attr("src",pic);
+	  		i++;
+	  		if(i==6){
+	  			i=1;
+	  		}
+	  	},1000);
+	  });
+  </script>
+  <body>
+	<img  src="">
+  </body>
+</html>

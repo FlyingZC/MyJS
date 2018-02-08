@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/vue.js"></script>
+		<script type="text/x-template" id="anchored-heading-template">
+			<div>
+				<h1 v-if="level === 1">
+			      <slot></slot>
+			    </h1>
+				<h2 v-if="level === 2">
+			      <slot></slot>
+			    </h2>
+				<h3 v-if="level === 3">
+			      <slot></slot>
+			    </h3>
+				<h4 v-if="level === 4">
+			      <slot></slot>
+			    </h4>
+				<h5 v-if="level === 5">
+			      <slot></slot>
+			    </h5>
+				<h6 v-if="level === 6">
+			      <slot></slot>
+			    </h6>
+			</div>
+		</script>
+		<script>
+			Vue.component('anchored-heading', {
+				template: '#anchored-heading-template',
+				props: {
+					level: {
+						type: Number,
+						required: true
+					}
+				}
+			})
+
+			Vue.component('anchored-heading2', {
+				render: function(createElement) {
+					return createElement(
+						'h' + this.level, // tag name 标签名称
+						this.$slots.default // 子组件中的阵列
+					)
+				},
+				props: {
+					level: {
+						type: Number,
+						required: true
+					}
+				}
+			})
+
+			var app1 = new Vue({
+				data: {
+
+				}
+			});
+		</script>
+	</head>
+
+	<body>
+		<div id="app1">
+			<h1>
+	 			 <a name="hello-world" href="#hello-world">
+	    			Hello world!
+	  			</a>
+			</h1>
+			<anchored-heading :level="3">Hello world!</anchored-heading>
+			<anchored-heading2 :level="1">Hello world!</anchored-heading2>
+		</div>
+
+	</body>
+
+</html>

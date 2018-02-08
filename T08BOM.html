@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/jquery-2.2.3.min.js" ></script>
+		<script>
+			//window对象:ECMAScript规定的Global对象,表示浏览器实例
+			var age=29;
+			function sayAge(){
+				console.log(this.age);
+			}
+			console.log(window.age);
+			sayAge();
+			window.sayAge();
+			//删除一个属性 返回false 没删掉
+			console.log(delete window.age);
+			console.log(window.age);
+			
+			console.log(window.hobby);//undefined
+		//窗口位置
+			//获取窗口位置.ie中screenLeft和screenTop属性.表示窗口相对于屏幕左边和上边的位置.其他浏览器screenX和screenY
+			var leftPos=(typeof window.screenLeft=="number")?window.screenLeft:window.screenX;
+			var topPos=(typeof window.screenTop=="number")?window.screenTop:window.screenY;
+			console.log("leftPos:"+leftPos+",leftPos:"+topPos);
+			//移动窗口位置moveTo(x,y):新位置的坐标,moveBy(x,y)移动的像素数
+			$("#btn1").click(function(){
+				window.moveTo(100,100);
+			});
+			$("#btn2").click(function(){
+				window.moveBy(0,300);				
+			});
+			//打开新标签页
+			var newWindow=window.open("http://www.baidu.com");
+		
+		
+		//location
+			var getQueryStringArgs=function(){
+				var qs=(location.search.length>0?location.search.substring(1):"");
+				
+				var queryArgs={};
+				var items=qs.length?qs.split("&"):[];
+				
+				var item=null,name=null,value=null,i=0,len=items.length;
+				for(i=0;i<len;i++){
+					//每一个query拆成一个item数组
+					item=items[i].split("=");
+					name=decodeURIComponent(item[0]);
+					value=decodeURIComponent(item[1]);
+					if(name.length){
+						queryArgs[name]=value;
+					}
+				}
+				return queryArgs;
+			}
+			
+			console.log(location.hash);
+			console.log(location.host);
+			console.log(location.hostname);
+			console.log(location.href);
+			console.log(location.pathname);
+			var arr=location.pathname.split("/");
+			console.log(arr);
+			//http://localhost:8080/MyTravel/attraction/showAttractionDetailPage/12.do返回12
+			var getIdFromUrlPath=function(){
+				var pathStr=location.pathname;
+				var str=pathStr.substring(pathStr.lastIndexOf("/")+1,pathStr.lastIndexOf("."));
+				console.log(str);
+				return str;
+			}
+			
+		</script>
+	</head>
+	<body>
+		<button id="btn1">移动窗口</button>
+		<button id="btn2">移动窗口</button>
+	</body>
+</html>

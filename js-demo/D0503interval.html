@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-1.11.3.js"></script>
+		<script>
+			$(function() {
+
+				var time = 0;
+				$('button').click(function() {
+					//判断计时器是否处于关闭状态
+					if(time == 0) {
+						time = 10; //设定间隔时间（秒）
+
+						//启动计时器，倒计时time秒后自动关闭计时器。
+						var index = setInterval(function() {
+							time--;
+							if(time == 0) {
+								clearInterval(index);
+							}
+						}, 1000);
+
+						alert('按钮事件被触发');
+					} else {
+						alert('目前按钮事件不允许被触发');
+					}
+				});
+			});
+		</script>
+	</head>
+	<button>点我</button>
+
+	<body>
+	</body>
+
+</html>

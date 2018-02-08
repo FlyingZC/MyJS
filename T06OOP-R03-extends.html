@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			window.log=console.log;
+			//原型链的 问题,来自于   包含引用类型值   的   原型
+			//包含 引用类型值的 原型属性 会被 所有实例共享
+			//通过 原型来实现继承时,原型 实际上会变成 另一个类型的实例
+			//于是 ,原先的实例属性 也 顺理成章 成为了 现在的原型属性了
+			function SuperType(){
+				this.colors = ["r","g","b"];
+			}
+			
+			function SubType(){
+				
+			}
+			//!!!继承 SuperType.这句话会导致,new SuperType()对象中包含colors属性
+			//赋值给SubType.prototype,则相当于SubType.prototype中拥有colors属性
+			//即子类原型对象中拥有colors属性,而原型中的属性是所有实例对象共享的
+			SubType.prototype=new SuperType();
+			
+			var instance1 = new SubType();
+			//所以相当于修改了  [子类原型对象] 中的 属性
+			instance1.colors.push("yellow");
+			
+			var instance2 = new SubType();
+			console.log(instance1.colors);
+			//也会对其他的 [子类实例属性] 产生影响
+			console.log(instance2.colors);
+			
+			
+			//继承方式2:借用构造函数
+			//优点:可以解决原型 中 包含 引用类型值 所 带来的问题
+			//基本思想:在调用子类构造函数 时 调用父类构造函数(使用call仅仅把父类当做普通函数调用)
+			//!!!函数 只不过是 在特定环境中执行代码的对象
+			//问题:单纯使用借用构造函数的话,方法无法复用(相当于方法都定义在构造函数里了)
+			function SuperTypeJ(){
+				this.colors=["r","g","b"];//3.此时this指代子类对象,当然子类对象会拥有colors属性
+			}
+			function SubTypeJ(){
+				SuperTypeJ.call(this);//2.调用父函数,传入this
+			}
+			var j1 = new SubTypeJ();//1.
+			var j2 = new SubTypeJ();
+			
+			j1.colors.push("yellow");
+			log(j1.colors);
+			log(j2.colors);
+			
+			//!!借用构造函数 实现继承的应用1.可向父类构造函数 传递参数
+			function SuperTypeJ2(name){
+				this.name = name;	
+			}
+			
+			function SubTypeJ2(){
+				//继承了 SuperType,同时还传递了参数
+				SuperTypeJ2.call(this,"zcc");
+				//为了确保 父类 不会重写掉子类的属性,在调用父类构造函数之后再添加子类的属性
+				this.age = 29;
+			}
+			
+			var j21 = new SubTypeJ2();
+			log(j21.name);
+			log(j21.age);
+			
+			//继承实现3:组合继承
+			//将 原型继承 和借用构造函数 继承二者结合
+			//原型继承 实现 原型属性 和 方法 的继承,通过 借用构造函数实现对实例属性的继承
+			//则 既能实现 原型上定义方法实现了函数复用,又能保证每个实例都有它自己的属性
+			function SuperTypeZ(){
+				this.colors=["r","g","b"];
+			}
+			
+			SuperTypeZ.prototype.addColor=function(color){
+				this.colors.push(color);
+			}
+			
+			SuperTypeZ.prototype.sayColor=function(){
+				log(this.colors);
+			}
+			
+			function SubTypeZ(age){
+				SuperTypeZ.call(this);
+				this.age=age;
+			}
+			
+			SubTypeZ.prototype=new SuperTypeZ();
+			
+			SubTypeZ.prototype.sayAge = function(){
+				log(this.age);
+			}
+			
+			
+			
+			var z1 = new SubTypeZ(11);
+			z1.addColor("yellow");
+			var z2 = new SubTypeZ("black",13);
+			z2.addColor("red");
+			z1.sayColor();
+			z2.sayColor();
+			
+			//继承实现4:原型式继承
+			//借助原型  可以基于 已有的对象创建新对象,同时还不必因此创建自定义类型
+			function createObj(o){
+				function F(){};
+				F.prototype=o;
+				return new F();
+			}
+			
+			var o = {
+				name:"zcc",
+				friends:["r","g","b"]
+			};
+			
+			var c1 = createObj(o);
+			c1.name="zc1";
+			c1.friends.push('zzz');
+			
+			var c2 = createObj(o);
+			c2.name="zc2";
+			c2.friends.push('zzx');
+			
+			//继承实现5:寄生式继承
+			function createAnother(o){
+				//调用函数 创建一个新对象
+				var clone = createObj(o);
+				//增强该对象.不仅具有传入的o对象的属性和方法,还有自己的sayHi()方法
+				//
+				clone.sayHi = function(){
+					log('hi');
+				}
+				clone.ownColors=['r','g','b'];
+				//返回这个对象
+				return clone;
+			}
+			
+			var o5={
+				name:"zxx",
+				friends:["r","g"]
+			};
+			
+			var copy1 = createAnother(o5)
+			var copy2 = createAnother(o5)
+			
+			
+			//6.寄生组合式继承
+			function SuperTypeJZ(name){
+				this.name=name;
+				this.colors=['r','g','b'];
+			}
+			
+			SuperTypeJZ.prototype.sayName=function(){
+				log(this.name);
+			}
+			
+			function SubTypeJZ(name,age){
+				//第二次调用SuperTypeJZ()
+				//2.第二次调用,会在子类对象上创建 实例属性name和colors.于是这两个属性就屏蔽掉了原型中的同名属性
+				SuperTypeJZ.call(this,name);
+			}
+			//第一次调用SuperTypeJZ
+			//1.第一次调用,会将new SuperTypeJZ()里的name和colors属性添加到SubTypeJZ.prototype上
+			SubTypeJZ.prototype=new SuperTypeJZ();
+			SubTypeJZ.prototype.constructor=SubTypeJZ;
+			SubTypeJZ.prototype.sayAge=function(){
+				log(this.age);
+			}
+			
+			
+			
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

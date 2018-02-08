@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>执行字符串函数</title>
+		<script src="js/jquery-2.2.3.min.js"></script>
+		<script>
+			$(function() {
+				var funName = "funName1";
+				if(typeof eval(funName) === 'function') {
+					eval(funName).call(window, '11');
+				}
+				
+				console.log(evalStrFunction('funName2',[22]));
+				
+				var jsonResult=evalStrFunction('toJsonArrFunc',[22]);
+				debugger;
+				//JSON.parse(jsonResult);
+				eval('('+jsonResult+')');
+				
+				
+				var objArr=evalStrFunction('toObjArrFunc');
+				//此时 返回的已经是 数组对象 不能用eval了
+				//eval('('+objArr+')');
+				console.log();
+			});
+
+			function funName1(age) {
+				console.log(age);
+			}
+
+			var funName2 = function(age) {
+				console.log(age);
+				return age+"返回";
+			}
+			
+			//返回类json字符串
+			var toJsonArrFunc=function(){
+				return "[{key:'111',value:'2222'},{key:'111',value:'2222'}]";
+			}
+			
+			var toObjArrFunc=function(){
+				var obj1={key:'111',value:'2222'};
+				var obj2={key:'111',value:'2222'};
+				return [obj1,obj2];
+			}
+			
+			/**
+			 * 执行 字符串 函数
+			 * @param {Object} func 要执行的函数字符串,如'funName'或'funName()'
+			 * @param {Object} argsArr 要执行的方法参数数组,可不传(即undefined)
+			 */
+			var evalStrFunction = function(func, argsArr) {
+				if(typeof(func)!=='string' && (argsArr instanceof Array|| typeof(argsArr)==='undefined')){
+					console.warn('请传入正确的参数');
+					return false;
+				}
+				//若类似于"funcName()",则截取成"funcName"
+				if(func.indexOf('(') != -1) {
+					func = func.substring(0, func.indexOf('('));
+				}
+				try {
+					//函数返回值
+					var result = eval(func).apply(window, argsArr);
+					return result;
+				} catch(e) {}
+			}
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

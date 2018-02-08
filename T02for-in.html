@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>遍历对象属性,for in,$.</title>
+		<script src="js/jquery-2.2.3.min.js"></script>
+		<script>
+			var Person = {
+				"name": "zx",
+				"age": 11
+			}; //自执行之前的这个;不能省略
+			
+			//2.使用jQuery的$.each遍历对象属性
+				var alterPerson = function(option) {
+					if(option) {
+						//遍历person
+						$.each(Person, function(k, v) {
+							if(k in Person) {//若传入对象中包含指定属性
+								Person[k] = option[k];
+							}
+						});
+					}
+				};
+			//匿名函数自执行	
+			(function() {
+				//1.for...in 遍历属性
+				for(prop in Person) {
+					console.log(prop + ":" + Person[prop]); //prop输出的是属性名,Person[prop]输出是属性值
+				}
+
+				//2.with:使用Person(这个对象)
+				with(Person) {
+					//相当于Person.name
+					name = "zzzz";
+					age = "11111";
+				}
+				for(prop in Person) {
+					console.log(prop + ":" + Person[prop]);
+				}
+				
+				//调用alterPerson
+				alterPerson({"name":"xdd"});
+				console.log(Person);
+			})();
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/jquery-2.2.3.min.js"></script>
+		<script>
+			$(function(){
+				var dataStr='{"id":"0100","childOrgList":[{"id":"0103","childOrgList":[{"id":"0110","childOrgList":[{"id":"31","childOrgList":[],"level":"3","address":"31","porgname":"","porgid":"0110","name":"31","y":"","xy":"null,null","x":"","orgLevel":""},{"id":"32","childOrgList":[],"level":"3","address":"32","porgname":"","porgid":"0110","name":"32","y":"","xy":"null,null","x":"","orgLevel":""}],"level":"3","address":"33","porgname":"","porgid":"0103","name":"杭州银行南京分行江宁支行","y":"","xy":"null,null","x":"","orgLevel":""},{"id":"0112","childOrgList":[],"level":"3","address":"南京分行鼓楼","porgname":"","porgid":"0103","name":"杭州银行南京分行鼓楼支行","y":"","xy":"null,null","x":"","orgLevel":""}],"level":"2","address":"兴安盟","porgname":"","porgid":"0100","name":"北京银行兴安盟分行","y":"2","xy":"2,2","x":"2","orgLevel":""},{"id":"0105","childOrgList":[{"id":"0101","childOrgList":[],"level":"3","address":"深圳分行龙岗","porgname":"","porgid":"0105","name":"北京银行深圳分行龙岗支行","y":"4","xy":"3,4","x":"3","orgLevel":""},{"id":"0102","childOrgList":[{"id":"0202","childOrgList":[{"id":"0201","childOrgList":[],"level":"5","address":"中国日本","porgname":"","porgid":"0202","name":"北京银行日本分行","y":"","xy":"null,null","x":"","orgLevel":""}],"level":"4","address":"中国浦口","porgname":"","porgid":"0102","name":"北京银行南京浦口支行","y":"","xy":"null,null","x":"","orgLevel":""}],"level":"3","address":"深圳分行龙华","porgname":"","porgid":"0105","name":"北京银行深圳分行龙华支行","y":"3","xy":"3,3","x":"3","orgLevel":""},{"id":"6666","childOrgList":[],"level":"3","address":"美国白宫","porgname":"","porgid":"0105","name":"北京银行美国分行","y":"","xy":"null,null","x":"","orgLevel":""}],"level":"1","address":"北京中关村","porgname":"","porgid":"0100","name":"北京银行分行","y":"","xy":"null,null","x":"","orgLevel":""},{"id":"0106","childOrgList":[{"id":"0107","childOrgList":[{"id":"0109","childOrgList":[],"level":"3","address":"南京分行栖霞","porgname":"","porgid":"0107","name":"杭州银行南京分行栖霞支行","y":"","xy":"null,null","x":"","orgLevel":""},{"id":"0111","childOrgList":[],"level":"3","address":"南京分行玄武","porgname":"","porgid":"0107","name":"杭州银行南京分行玄武支行","y":"","xy":"null,null","x":"","orgLevel":""},{"id":"0108","childOrgList":[],"level":"3","address":"北三环102","porgname":"","porgid":"0107","name":"北京银行北三环支行","y":"","xy":"null,null","x":"","orgLevel":""}],"level":"2","address":"南京新街口","porgname":"","porgid":"0106","name":"北京银行南京新街口管辖支行","y":"","xy":"null,null","x":"","orgLevel":""}],"level":"1","address":"南京小龙湾","porgname":"","porgid":"0100","name":"北京银行南京分行","y":"","xy":"null,null","x":"","orgLevel":""}],"level":"","address":"","porgname":"","porgid":"xxxx","name":"","y":"","xy":"","x":"","orgLevel":"0"}';
+				var obj=JSON.parse(dataStr);
+				getCurrObjAndSub("0100",obj);
+				
+				$('body').on('change','select',function(){
+					var porgid=$(this).find('option:selected').val();
+					$(this).nextAll('select').remove();
+					if(porgid!="-1"){
+						getCurrObjAndSub(porgid,obj);	
+					}
+				});
+			});
+			
+			/**
+			 * 获取想要的select对象和其孩子
+			 * @param {Object} porgid 父id
+			 * @param {Object} obj 数据对象
+			 */
+			var getCurrObjAndSub=function(porgid,obj){
+				if(obj.id==porgid){//当前节点是父亲
+					genWholeSelect(obj);
+				}else{
+					for(var i=0;i<obj.childOrgList.length;i++){
+						getCurrObjAndSub(porgid,obj.childOrgList[i]);							
+					}
+				}
+			}
+			
+			var genWholeSelect=function(currObj){
+				if(currObj.childOrgList.length==0){
+					return;
+				}
+				var optionTemplate="<option value='-1'>--请选择--</option>";
+				for(var i=0;i<currObj.childOrgList.length;i++){
+					var currSub=currObj.childOrgList[i];
+					optionTemplate+='<option value="'+currSub.id+'">'+currSub.name+'--'+currSub.address+'</option>';
+				}
+				var selectTemplate=$('<select></select>').append(optionTemplate);
+				$('body').append(selectTemplate);
+			}
+		</script>
+	</head>
+	<body>
+		
+	</body>
+</html>

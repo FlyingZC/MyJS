@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/jquery-2.2.3.min.js"></script>
+		<script>
+		$(function(){
+			$(":radio").change(function(){
+				if($(this).val()=="1"){//随机,总额可用
+					console.log(1);
+					$("#perMoney").removeAttr("readonly");
+					$("#sumMoney").attr("readonly","readonly");
+				}else if($(this).val()=="2"){
+					console.log(2);
+					$("#sumMoney").removeAttr("readonly");
+					$("#perMoney").attr("readonly","readonly");
+				}		
+			});
+		});
+			
+		</script>
+	</head>
+	<body>
+		<input type="radio" name="hobby" value="1"/>游泳<br />
+		<input type="radio" name="hobby" value="2" checked="checked"/>读书
+		总<input type="text" id="sumMoney"/>
+		单<input type="text" id="perMoney"/>
+	</body>
+</html>

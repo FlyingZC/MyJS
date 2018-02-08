@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>生命周期</title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/vue.js"></script>
+		<script>
+			$(function(){
+				var app1=new Vue({
+					el:'#app-1',
+					data:{
+						persons:[
+							{name:'zx',age:121,id:1},
+							{name:'za',age:114,id:2},
+							{name:'zb',age:115,id:3},
+							{name:'zc',age:116,id:4},
+							{name:'zd',age:117,id:5}
+						],
+						a:1
+					},
+					//生命周期钩子,在创建vue后调用
+					//Vue没有控制器!!,组件的自定义逻辑分布在这些钩子中
+					beforeCreate:function(){
+						console.log("--beforeCreate--"+this.a);
+						console.log("--observe data--");
+						console.log("--init Events--");
+					},
+					created:function(){
+						console.log("--created--"+this.a);
+					},
+					beforeMount:function(){
+						console.log("--beforeMount--");
+					},
+					mounted:function(){
+						console.log("--mounted--");
+					},
+					deforeUpdate:function(){
+						console.log("--deforeUpdate--");
+					},
+					updated:function(){
+						console.log("--updated--");
+					},
+					beforeDestroy:function(){
+						console.log("--beforeDestroy--");
+					},
+					destroyed:function(){
+						console.log("--destroyed--");
+					}
+				});	
+				//通过vm.$data,vm.$el等
+				console.log(app1.$data.persons[0]);
+			});
+			
+		</script>
+	</head>
+	<body>
+		<div id="app-1"></div>
+	</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>对象(方法传入基本数据类型和引用类型的区别),作用域,typeof 和 instanceof;对象Object中的属性(property)有4个Attribute </title>
+		<script>
+			//引用类型的动态属性.可以添加属性,方法或改变删除属性,方法
+			var person=new Object();
+			person.name="zc";
+			console.log(person.name);
+			console.log(person.age);
+			
+			//若尝试给基本数据类型添加属性,随后立即消失
+			var stu="zcc";
+			stu.age=27;
+			console.log(stu.age);//undefined
+
+			//!!!基本数据类型复制,直接复制值,不互相影响.引用类型复制,实际是引用,会相互影响
+			var obj1=new Object();
+			var obj2=obj1;//将obj1的引用赋给obj2
+			obj1.name="zccx";//修改obj1中的属性值
+			console.log(obj2.name);//zccx obj2中的属性值也会改变
+			
+			//传入基本数据类型,不影响
+			function addTen(num){
+				num+=10;
+				return num;
+			}
+			
+			var count=20;
+			var result=addTen(count);//调用
+			console.log(result);//30 方法返回值
+			console.log(count);//20 count值未发生改变
+			
+			//测试 传入 引用类型
+			function setName(obj){
+				obj.name="Nick";
+			}
+			var person=new Object();
+			setName(person);
+			console.log(person.name);//Nick person的name属性值发生改变
+			
+			//
+			function setName2(obj){
+				obj.name="Nick";
+				//创建新的引用类型
+				obj=new Object();
+				obj.name="NewNick";
+			}
+			var per=new Object();
+			setName2(per);
+			console.log(per.name);//Nick
+			
+			//typeof检测给定变量的数据类型.可能返回的值
+			//1.'undefined',2.'boolean',3.'string',4.'number',
+			//5.'object' 该值为对象或null或array或其他object类型,6.'function'
+			console.log("--test typeof--");
+			console.log(typeof null);//object
+			console.log(typeof new Array());//object,数组也是引用类型
+			console.log(typeof hahahh);//undefined
+			
+		//instanceof !!!!检测引用类型的值
+			console.log("=============== 测试instanceof ===============");
+			console.log(per instanceof Object);//true
+			//!!!使用instanceof检测基本数据类型的实例时(如Number,String,null,undefined等),永远返回false
+			var c=1;
+			console.log(c instanceof Object);//false
+			console.log(1 instanceof Number);//false
+			console.log("a" instanceof String);//false
+			
+			//数组 是 引用类型
+			console.log([] instanceof Object);//true
+			console.log(typeof [] ==='object');//true
+			console.log([] instanceof Array);//true
+			
+			//!!!!!没有块级作用域,if语句中的变量声明会被添加到当前 的 执行环境(此时为 全局环境)中
+			if(true){
+				var color="blue";//声明在此
+			}
+			console.log(color);//blue,在外面仍然能访问
+			
+			for(var i=0;i<10;i++){
+				
+			}
+			console.log(i);//10
+			
+			//在此时并未声明zcolor,java中会由于zcolor未声明报错.js不会
+			function getColor(){
+				return zcolor;
+			}
+			console.log(getColor());//undefined
+			var zcolor="blue";
+			//先在getColor(){}函数内部的作用域中寻找zcolor的值,但是未找到.随后到外层作用域(即全局作用域中)寻找
+			console.log(getColor());//blue
+			
+			
+			//对象Object中的属性(property)有4个Attribute:
+			//分别为
+			//[Configurable]: 能否通过delete删除该property
+			//[Enumerable]:   能否通过for-in遍历该property
+			//[Writable]:     能否修改property的值
+			//[Value]:        默认为undefinded.当age="11"时,[Value]即为11
+			
+			//通过Object.defineProperty()定义某个对象中的某个属性,可以修改默认property的4种attribute
+			var myPerson={};
+			//调用该方法时,若不指定,默认都是false
+			Object.defineProperty(myPerson,"age",{
+				configurable:false,
+				enumerable:false,
+				writable:false,
+				value:"zxx"
+			});
+			console.log(myPerson.age);
+			//删除age属性.当指定configurable为false时.删除无效.
+			delete myPerson.age;
+			console.log(myPerson.age);
+			
+			//当指定enumerable为false时不可迭代
+			for(prop in myPerson){
+				console.log(prop+":"+myPerson[prop]);
+			}
+			myPerson.age="1122";
+			
+			//当指定writable为false时,不可修改
+			console.log(myPerson.age);
+			
+			//定义访问器属性.即getter和setter方法.没好用
+			var book={
+				name:"thinking",
+				year:"2002"
+			};
+			/*Object.defineProperty(book,"year",{
+				get:function(){
+				},
+				set:function(newYear){
+					this.year=newYear;
+				}
+			});
+			console.log(book.year);*/
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

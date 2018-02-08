@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/vue.js"></script>
+		<script>
+			$(function() {
+				var app1 = new Vue({
+					el: '#app1',
+					data: {
+						message: 'Hello'
+					},
+					//定义计算表达式,用于修改属性值
+					computed: {
+						// a computed getter
+						reversedMessage: function() {
+							// `this` points to the vm instance
+							return this.message.split('').reverse().join('')
+						},
+						dealHello:function(){
+							return "deal";
+						},
+						dealHello2:function(arg){//computed没有被识别,不支持传参??反而是methods被识别了
+							return "hello"+arg;
+						}
+					},
+					methods:{
+						dealHello2:function(arg){
+							return "hello"+arg;
+						}
+					}
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		过滤器用在插值 和 v-bind表达式
+		<div id="app1">
+			<div id="example">
+				<p>Original message: "{{ message }}"</p>
+				<p>Computed reversed message: "{{ reversedMessage }}"</p>
+				<p v-bind:title="dealHello">哈哈哈</p>
+				<p v-bind:title="dealHello2('inarg')">呵呵呵</p>
+			</div>
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>函数隐藏属性和方法:arguments,callee,this,caller,length,prototype</title>
+		<script>
+			//每个函数中的几个隐含属性,arguments,callee,this,caller,length,prototype
+			//arguments.callee:指向拥有该arguments对象的函数,即当前函数
+			//arguments.callee.caller:当前函数的调用函数.即指向哪个函数 调用 了当前函数
+			//每个函数中都包含两个方法:apply()和call(),在特定作用域中调用函数,相当于设定函数体内this对象的值
+			//第一个参数为一个函数,第二个函数是要传递给该函数的一个值
+			//apply()和call()使用大致相同.    
+			//apply()用法:		具体要调用的函数.apply(指定的作用域,[参数数组]); sum.apply(this,[num1,num2]);
+			//call()用法:		具体要调用的函数.call(指定的作用域,参数1,参数2...); sum.call(this,num1,num2);
+			
+			
+			var test=function(arg1,arg2){
+				console.log("testFun"+arg1+arg2);
+			}
+			//通过eval("方法名").call(作用域,参数1,参数2...)调用test()函数
+			var cusStr = eval("test").call(window, "a","b" );
+			
+			function callSomeFunction(someFunction,someArgument){
+				//不加()是访问函数的指针,加()是调用.此处为  调用
+				return someFunction(someArgument);
+			}
+			
+			function add(num){
+				return num+10;
+			}
+			var result1=callSomeFunction(add,100);
+			console.log(result1);//110
+			
+			function hello(name){
+				return "Hello"+name;
+			}
+			var result2=callSomeFunction(hello,"kitty");
+			console.log(result2);
+			
+			
+			//二.arguments.callee实现递归
+			function factorial(num){
+				if(num<=1){
+					return 1;
+				}else{
+					//arguments.callee指向拥有该arguments对象的函数,此处即为factorial函数
+					return num*arguments.callee(num-1);
+				}
+			}
+			
+			//三.caller
+			function outer(){
+				inner();
+			}
+			function inner(){
+				console.log(inner.caller);//输出为outer这个函数
+				for(var i=0;i<arguments.length;i++){
+					console.log(arguments[i]);
+				}
+				//输出outer函数.即指向outer函数
+				console.log(arguments.callee.caller);
+			}
+			outer();//调用outer函数
+			
+			//四.length表示该函数希望接收的参数的个数
+			function add1(num){
+				
+			}
+			function add2(num1,num2){
+				
+			}
+			console.log(add2.length);//2	
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

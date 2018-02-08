@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../../js/angular-1.2.5.min.js"></script>
+		<script>
+			function PhoneListCtrl($scope) {
+			  $scope.phones = [
+			    {"name": "苹果4",
+			     "snippet": "Fast just got faster with Nexus S.",
+			     "orderNum":4},
+			    {"name": "苹果2",
+			     "snippet": "The Next, Next Generation tablet.",
+			    "orderNum":2},
+			    {"name": "苹果3™",
+			     "snippet": "The Next, Next Generation tablet.",
+			    "orderNum":3}
+			  ];
+			  //1.2.指定filter的ng-model为遍历元素中的name属性
+			   $scope.orderProp = 'orderNum';
+			}
+		</script>
+	</head>
+	<body ng-app>
+		<div class="container-fluid " ng-controller="PhoneListCtrl">
+		  <div class="row-fluid">
+		    <div class="span2">
+		      <!--Sidebar content-->
+			  <!--1.1.filter的ng-model-->	
+		      搜索: <input ng-model="query">
+		      <br/>
+		      排序:
+		 <!--2.orderBy过滤器以一个数组作为输入，复制一份副本，然后把副本重排序再输出到迭代器。-->     
+		<select ng-model="orderProp">
+		  <option value="name">Alphabetical</option>
+		  <option value="age">Newest</option>
+		</select>
+		
+		    </div>
+		    <div class="span10">
+		      <!--Body content-->
+		
+		      <ul class="phones">
+		      	<!--注意 每个|前后必须有空格,否则无效-->
+		      	<!--1.3.使用filter过滤器：filter函数使用query的值来创建一个只包含匹配query记录的新数组。-->
+		      	<!--2.order by 显示结果排序-->
+		        <li ng-repeat="phone in phones | filter:query | orderBy:orderProp">
+		          {{phone.name}}
+		        <p>{{phone.snippet}}</p>
+		        </li>
+		      </ul>
+		
+		       </div>
+		  </div>
+		</div>
+	</body>
+</html>

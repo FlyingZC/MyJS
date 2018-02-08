@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/angular.min.js"></script>
+		<script>
+			var app=angular.module('myApp',[]);
+			app.controller('myController',function($scope,$http){
+				$http.get('menu.json').then(
+					function(response){
+						console.log(response);
+					}
+				).catch(function(response){
+						console.log(response);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div ng-app='myApp'>
+			<h1>{{names[0].Name}}</h1>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/vue.js"></script>
+		<script>
+			$(function(){
+				var app1=new Vue({
+					el:'#app1',
+					data:{
+						message:'初始值哦',
+						love:true,
+						//默认复选框的value='Jack'被选中,当选中其他,则会添加到该数组中
+						checkedNames:["Jack"],
+						picked:'',
+						//下拉列表
+						selected:'a',
+						//下拉多选列表
+						selected2:['a','b'],
+						//v-for渲染select
+						selected3: 'A',
+					    options: [//填充option
+					      { text: 'One', value: 'A' },
+					      { text: 'Two', value: 'B' },
+					      { text: 'Three', value: 'C' }
+					    ]
+					}
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div id="app1">
+			1.文本框<br>
+			<input v-model="message" placeholder="edit me">
+			<p>Message is: {{ message }}</p>
+			<br/>
+			2.文本域<br>
+			<span>Multiline message is:</span>
+			<textarea v-model="message" placeholder="add multiple lines"></textarea>
+			<br/>
+			3.复选框,由于love的值为true,所以checkbox被选中<br>
+			<input type="checkbox" id="checkbox" v-model="love">
+			<label for="checkbox">love</label>
+			<br/>
+			复选框,选中多个值,对应一个数组.<br>
+			<input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+			<label for="jack">Jack</label>
+			<input type="checkbox" id="john" value="John" v-model="checkedNames">
+			<label for="john">John</label>
+			<input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+			<label for="mike">Mike</label>
+			<br>
+			<span>Checked names: {{ checkedNames }}</span>
+			<br/>
+			4.单选框<br>
+			<input type="radio" id="one" value="One" v-model="picked">
+			<label for="one">One</label>
+			<br>
+			<input type="radio" id="two" value="Two" v-model="picked">
+			<label for="two">Two</label>
+			<br>
+			<span>Picked: {{ picked }}</span>
+			5.下拉框<br />
+			 <select v-model="selected">
+			    <option value="a">A</option>
+			    <option value="b">B</option>
+			    <option value="c">C</option>
+			 </select>
+			 <span>Selected: {{ selected }}</span>
+			 6.下拉框-多选列表<br />
+			 <select v-model="selected2" multiple="multiple">
+			    <option value="a">A</option>
+			    <option value="b">B</option>
+			    <option value="c">C</option>
+			 </select>
+			 <span>Selected: {{ selected2 }}</span>
+			 <br />
+			 7.select 使用v-for渲染
+			 <select v-model="selected3">
+			  <option v-for="option in options" v-bind:value="option.value">
+			    {{ option.text }}
+			  </option>
+			</select>
+			<span>Selected: {{ selected3 }}</span>
+			<br>
+		</div>
+		
+	</body>
+</html>

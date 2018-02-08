@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>dom06createElement,createTextNode</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<script>
+		window.onload=function(){
+			var aNode=document.getElementById("bj");
+			var bNode=document.getElementById("rl");
+			replaceEach(aNode,bNode);
+		}
+		//互换两个结点
+		function replaceEach(aNode,bNode){
+			var aParent=aNode.parentNode;
+			var bParent=bNode.parentNode;
+			//
+			var aNodeCopy=aNode.cloneNode(true);
+			
+		}
+	</script>
+  </head>
+  
+  <body>
+		<p>你喜欢哪个城市?</p>
+		<ul id="city">
+			<li id="bj" name="BeiJing">北京</li>
+			<li>上海</li>
+			<li>东京</li><li>首尔</li>
+		</ul>
+		<br><br>
+		
+		<p>你喜欢哪款单机游戏?</p>
+		<ul id="game">
+			<li id="rl">红警</li>
+			<li>实况</li>
+			<li>极品飞车</li>
+			<li>魔兽</li>
+		</ul>
+  </body>
+</html>

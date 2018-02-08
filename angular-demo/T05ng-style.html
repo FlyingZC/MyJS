@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/angular.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css" />
+		<title></title>
+	</head>
+	<body ng-app='myApp'>
+		<input type="text" ng-model="color" />
+		<div>{{color}}</div>
+		<div id="d1" ng-style="{width:100,height:100,backgroundColor:'blue'}"></div>
+		<div id="d2" ng-style="myStyle"></div>
+		<div ng-show="false">哈哈哈</div>
+		<div ng-show="true">哈哈哈</div>
+		<div>
+			<input type="text" ng-model="msg" ng-change="changeFunc(msg)" />
+		</div>
+	</body>
+	<script>
+		//[]不能少
+		var app=angular.module('myApp',[]);
+		app.controller('myCtrl',function($scope,$element){
+			var elem=$("#d1");
+			$scope.msg;
+			$scope.color="blue";
+			$scope.myStyle={
+				width:100,
+				height:100,
+				backgroundColor:$scope.color
+			};
+			$scope.$watch("color",function(to,from){
+				$scope.myStyle.backgroundColor=to;
+			});
+			
+			$scope.changeFunc=function(msg){
+				console.log(msg);
+			}
+			
+		});
+	</script>
+</html>

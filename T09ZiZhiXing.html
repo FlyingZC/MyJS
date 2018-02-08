@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script>
+			//js自执行
+			//方式1
+			(function(){alert(1);}());
+			//方式2
+			(function(){alert(2);})();
+			//方式3.加上!或+等运算符.或void
+			!function(){alert(3);}();
+			void function(){alert(4);}();
+			+function(){alert(5);}();
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
