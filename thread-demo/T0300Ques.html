@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-1.11.3.js"></script>
+		<script>
+			// 异步 通过判断url,进行控制顺序
+			var res = [];
+
+			function response(data) {
+				if(data.url == "http://some.url.1") {
+					res[0] = data;
+				} else if(data.url == "http://some.url.2") {
+					res[1] = data;
+				}
+			}
+			// ajax(..)是某个库中提供的某个Ajax函数
+			ajax("http://some.url.1", response);
+			ajax("http://some.url.2", response);
+
+			/**
+			 * 使用 随机数 加 定时器 模拟ajax请求callback的不确定性.异步
+			 * @param {Object} callback
+			 */
+			function ajax(url, callback) {
+				var time = Math.random();
+				if(callback && typeof callback === 'function')
+					setTimeout(callback, time);
+			}
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-1.11.3.js"></script>
+		<script>
+			var a;
+
+			function foo(x) {
+				if(!a) { // 如果a没赋值,再允许赋值.这相当于 门闩,只让第一个通过
+					a = x * 2;
+					baz();
+				}
+			}
+
+			function bar(x) {
+				if(!a) {
+					a = x / 2;
+					baz();
+				}
+			}
+
+			function baz() {
+				console.log(a);
+			}
+
+			// ajax(..)是某个库中的某个Ajax函数
+			ajax("http://some.url.1", foo, [1]);
+			ajax("http://some.url.2", bar, [2]);
+
+			/**
+			 * 使用 随机数 加 定时器 模拟ajax请求callback的不确定性.异步
+			 * @param {Object} callback
+			 */
+			function ajax(url, callback, args) {
+				var time = Math.random();
+				if(callback && typeof callback === 'function')
+					// 注意 this 和 callback的区别
+					setTimeout(callback.apply(callback, args), time);
+			}
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

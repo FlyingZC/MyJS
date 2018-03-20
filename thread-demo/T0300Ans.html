@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-1.11.3.js"></script>
+		<script>
+			
+			// 异步回来的数据如何控制顺序
+			var res = [];
+			function response(data) {debugger;
+				res.push(data);
+			}
+			
+			// ajax(..)是某个库中的某个Ajax函数
+			ajax("http://some.url.1", response, [1],20000);
+			ajax("http://some.url.2", response, [2],100);
+
+			/**
+			 * 使用 随机数 加 定时器 模拟ajax请求callback的不确定性.异步.使用time自己指定
+			 * @param {Object} callback
+			 */
+			function ajax(url, callback, args, time) {
+				var time = time || Math.random();
+				if(callback && typeof callback === 'function')
+					// 注意 this 和 callback的区别
+					setTimeout(callback, time);
+			}
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

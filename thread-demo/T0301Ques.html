@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-1.11.3.js"></script>
+		<script>
+			//这个例子中，无论 foo() 和 bar() 哪一个先被触发，总会使 baz() 过早运行（ a 或者 b 仍处
+			//于未定义状态）；但对 baz() 的第二次调用就没有问题，因为这时候 a 和 b 都已经可用了。
+			var a, b;
+
+			function foo(x) {
+				a = x * 2;
+				baz();
+			}
+
+			function bar(y) {
+				b = y * 2;
+				baz();
+			}
+
+			function baz() {
+				console.log(a + b);
+			}
+			// ajax(..)是某个库中的某个Ajax函数
+			ajax("http://some.url.1", foo);
+			ajax("http://some.url.2", bar);
+
+			/**
+			 * 使用 随机数 加 定时器 模拟ajax请求callback的不确定性.异步
+			 * @param {Object} callback
+			 */
+			function ajax(url, callback) {
+				var time = Math.random();
+				if(callback && typeof callback === 'function')
+					setTimeout(callback, time);
+			}
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

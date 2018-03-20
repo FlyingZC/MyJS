@@ -104,7 +104,7 @@
 			//队列方法
 			console.log(c6.shift()); //r 移除并获取第一项,数组长度减一,队列操作
 			console.log("--unshift--");
-			console.log(c6.unshift("a", "b")); //2 unshift在数组头放入(添加),返回添加的元素个数
+			console.log(c6.unshift("a", "b")); //2 unshift在数组头放入(添加),返回新数组的总长度
 			console.log(c6);
 			
 			c6.reverse();//反转
@@ -194,11 +194,22 @@
 			log(new Date(2013, 11, 11));
 			//接收 毫秒数
 			log(new Date(new Date().getTime()));
+			
+			//Date API
+			
+			
 			//四.RegExp类型
-
+			//RegExp对象 表示 正则表达式,是对字符串执行模式匹配的强大工具
+			//1.直接量语法  /pattern/attributes
+			//2. 创建RegExp对象, new RegExp(pattern, attributes)
+			// attributes可选,可为"g"全局匹配(查找所有匹配 而非在找到第一个匹配后停止),"i"区分大小写,"m"多行匹配
+			
 			//五.Math
 			Math.random(); //返回0-1之间的随机数,不包括0和1
-
+			
+			//Number
+			
+			
 			//六.Function类型
 			//1.函数声明
 			//(2)
@@ -236,7 +247,7 @@
 			}
 			console.log(callSu3(19, 20));
 
-			//!!!!!!!!1call()和apply()作用,扩充函数赖以运行的作用域
+			//!!!!!!!!call()和apply()作用,扩充函数赖以运行的作用域
 			window.color = "red";
 			var o = { color: "blue" };
 
@@ -256,6 +267,14 @@
 			var e3 = new String("some txt");
 			var e4 = e3.substring(2);
 			e3 = null;
+			
+			//apply demo2
+			var ad1 = Function.prototype.call.apply(function(a){return a;}, [0,4,3]);
+			//将Function.prototype.call当成整体
+			//apply会将[0,4,3]数组参数,转成参数列表(0,4,3)
+			//fun.apply(obj,args)等价于obj.fun(args),即等价于function(a){return a;}.call(0,4,3);
+			//又等价于this.func(4,3) //call里面第一个参数0,肯定被直接忽略掉,然后func里return 4
+			log(ad1);// 4
 		</script>
 	</head>
 

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="../js/jquery-1.11.3.js"></script>
+		<script>
+			// 两个回调 回来后 都会 修改a的值. 目的:只有第一个回来的能修改a的值
+			var a;
+
+			function foo(x) {
+				a = x * 2;
+				baz();
+			}
+
+			function bar(x) {
+				a = x / 2;
+				baz();
+			}
+
+			function baz() {
+				console.log(a);
+			}
+			// ajax(..)是某个库中的某个Ajax函数
+			ajax("http://some.url.1", foo, [1]);
+			ajax("http://some.url.2", bar, [2]);
+
+			/**
+			 * 使用 随机数 加 定时器 模拟ajax请求callback的不确定性.异步
+			 * @param {Object} callback
+			 */
+			function ajax(url, callback) {
+				var time = Math.random();
+				if(callback && typeof callback === 'function')
+					setTimeout(callback, time);
+			}
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>

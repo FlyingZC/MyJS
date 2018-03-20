@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>金额小写转大写</title>
+		<script src="../js/jquery-1.11.3.js"></script>
+		<script>
+			$(function(){
+				console.log(transAmountToBig(4321987654321.12));
+				console.log(transAmountToBig(321987654321.12));
+				console.log(transAmountToBig(21987654321.12));
+				console.log(transAmountToBig(1987654321.12));
+				console.log(transAmountToBig(987654321.12));
+				console.log(transAmountToBig(87654321.12));
+				console.log(transAmountToBig(7654321.12));
+				console.log(transAmountToBig(654321.12));
+				console.log(transAmountToBig(54321.12));
+				console.log(transAmountToBig(4321.12));
+				console.log(transAmountToBig(321.12));
+				console.log(transAmountToBig(21.12));
+				console.log(transAmountToBig(1.12));
+				console.log(transAmountToBig(1));
+				console.log(transAmountToBig(-987654321.12));
+				console.log(transAmountToBig(-987654321987654321.123));
+			});
+			
+			/** 数字金额大写转换(可以处理整数,小数,负数) */
+			function transAmountToBig(n) {
+				var fraction = ['角', '分'];
+				var digit = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'];// 大写数字
+				var unit = [
+					['元', '万', '亿'],
+					['', '拾', '佰', '仟']
+				];
+				var head = n < 0 ? '欠' : '';
+				n = Math.abs(n);// 绝对值
+
+				var s = '';
+				// 处理小数点后的小数,为 分 角
+				for(var i = 0; i < fraction.length; i++) {
+					s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');
+				}
+				s = s || '整';// 没有小数,末尾显示"整"
+				n = Math.floor(n);
+
+				for(var i = 0; i < unit[0].length && n > 0; i++) {
+					var p = '';
+					for(var j = 0; j < unit[1].length && n > 0; j++) {
+						p = digit[n % 10] + unit[1][j] + p;
+						n = Math.floor(n / 10);
+					}
+					s = p.replace(/(零.)*零$/, '').replace(/^$/, '零') + unit[0][i] + s;
+				}
+				return head + s.replace(/(零.)*零元/, '元').replace(/(零.)+/g, '零').replace(/^整$/, '零元整');
+			}
+		</script>
+	</head>
+
+	<body>
+	</body>
+
+</html>
